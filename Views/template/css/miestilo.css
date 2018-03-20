@@ -1,0 +1,37 @@
+
+.btn-card-danger:hover {
+	color: #dc3545;
+}
+
+.btn-card {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.carta {
+	margin-bottom: 30px;
+}
+
+.tablero td {
+	padding: 0px;
+	text-align: center!important;
+	vertical-align: middle;
+}
+
+.tablero button{
+	width: 100%;
+}
+
+
+#porcentaje-handler {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+
+#porcentaje-handler .ui-slider-range { 
+    background-color: #729fcf; 
+}
