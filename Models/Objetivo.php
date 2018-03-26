@@ -13,9 +13,13 @@
 		private $asignador;
 		private $responsable;
 		private $objetivo_padre;
+		
+		private $con;
+		private $accion;
 
 		public function __construct(){
 			$this->con = new Conexion();
+			$this->accion = new Accion();
 		}
 
 		public function set($atributo, $contenido){
@@ -40,26 +44,37 @@
 
 		public function add(){
 			$query = "INSERT INTO objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', tipo_avance = 'individual', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', avance = 0, estatus = 'activo', asignador = '{$this->asignador}', responsable = '{$this->responsable}', objetivo_padre = '{$this->objetivo_padre}';";
-			$this->con->consultaSimple($query);
-		}		
+			return $this->con->consultaSimpleID($query);
+		}
 
-		public function avanzar($id, $porcentaje){
+		public function crear(){
+			$id_obj = $this->add();
+			//ACCION
+			$this->accion->addCreacion($id_obj);
+		}
+
+		public function avanzar($id, $porcentaje, $comentario){
 			$query = 'UPDATE objetivo SET avance = '.$porcentaje.'  WHERE id_objetivo = '.$id;
 			$this->con->consultaSimple($query);
+			//ACCION
+			$this->accion->addAvanzar($id, $comentario);
 			// METODO RECURSIVO D: NAA JUST KIDDIN :3
 			$this->setAvancePadres($id);
 			
 		}
 
-		public function asignar($id, $responsables){
+		public function asignar($id, $responsables, $comentario){
 			foreach ($responsables as $responsable) {
 				$this->set('responsable', $responsable);
-				$this->add();
+				$id_nuevo = $this->add();
+				//ACCION
+				$this->accion->addApropiar($id_nuevo, $responsable);
 			}
 
 			$query = 'UPDATE objetivo SET tipo_avance = "asignado", avance = '.$this->getPorcentajeAvance($id).'  WHERE id_objetivo = '.$id;
 			$this->con->consultaSimple($query);
-
+			//ACCION
+			$this->accion->addAsignar($id, $comentario);
 			// AL ASIGNAR SE ACTUALIZAN LOS PORCENTAJES DE AVANCE DE LOS PADRES
 			$this->setAvancePadres($id);
 		}

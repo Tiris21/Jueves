@@ -7,6 +7,7 @@
 		private $comentario;
 		private $id_objetivo;
 		private $id_usuario;
+		private $con;
 
 		public function __construct(){
 			$this->con = new Conexion();
@@ -31,15 +32,49 @@
 		}
 
 		public function add(){
-			$query = "INSERT INTO accion SET clase = '$this->clase', fecha_creacion = '{$this->fecha_creacion}', comentario = '$this->comentario', id_objetivo = '{$this->id_objetivo}', id_usuario = '{$this->id_usuario}';";
+			$query = "INSERT INTO accion SET clase = '$this->clase', fecha_creacion = NOW(), comentario = '{$this->comentario}', id_objetivo = '$this->id_objetivo', id_usuario = '$this->id_usuario';";
 			$this->con->consultaSimple($query);
 		}
 
-		public function getObjetivoPadre($op){
-			$obj = $this->viewId($op);
-			return $obj['objetivo_padre'];
+		public function addCreacion($id){
+			$this->clase = 'crear';
+			$this->comentario = null;
+			$this->id_objetivo = $id;
+			$this->id_usuario = $_SESSION['id_usuario'];
+			$this->add();
 		}
 
+		public function addAvanzar($id, $comentario){
+			$this->clase = 'avanzar';
+			$this->comentario = $comentario;
+			$this->id_objetivo = $id;
+			$this->id_usuario = $_SESSION['id_usuario'];
+			$this->add();
+		}
+
+		public function addAsignar($id, $comentario){
+			$this->clase = 'asignar';
+			$this->comentario = $comentario;
+			$this->id_objetivo = $id;
+			$this->id_usuario = $_SESSION['id_usuario'];
+			$this->add();
+		}
+
+		public function addApropiar($objetivo, $usuario){
+			$this->clase = 'apropiar';
+			$this->comentario = null;
+			$this->id_objetivo = $objetivo;
+			$this->id_usuario = $usuario;
+			$this->add();
+		}
+
+		public function addComentar($objetivo, $comentario){
+			$this->clase = 'comentar';
+			$this->comentario = $comentario;
+			$this->id_objetivo = $objetivo;
+			$this->id_usuario = $_SESSION['id_usuario'];
+			$this->add();
+		}
 
 
 

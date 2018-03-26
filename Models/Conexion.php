@@ -24,13 +24,15 @@
 			$this->con->query($sql);
 		}
 
+		public function consultaSimpleID($sql){
+			$this->con->query($sql);
+			return $this->con->insert_id;
+		}
+
 		public function consultaRetorno($sql){
 			return $this->con->query($sql);
 		}
 
-		public function getLastID(){
-			return $this->con->insert_id;
-		}
 	} 
 
 

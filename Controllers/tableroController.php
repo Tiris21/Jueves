@@ -2,15 +2,18 @@
 	
 	use Models\Objetivo as Objetivo;
 	use Models\Usuario as Usuario;
+	use Models\Accion as Accion;
 
 	class tableroController{
 
 		private $objetivo;
 		private $usuario;
+		private $accion;
 
 		public function __construct(){
 			$this->objetivo = new Objetivo();
 			$this->usuario = new Usuario();
+			$this->accion = new Accion();
 		}
 
 		public function index(){
@@ -35,7 +38,8 @@
 				$this->objetivo->set('responsable', $_SESSION['id_usuario']);
 				$this->objetivo->set('asignador', $_SESSION['id_usuario']);
 				$this->objetivo->set('objetivo_padre', 0);
-				$this->objetivo->add();
+				
+				$this->objetivo->crear();
 			}	
 
 			header("Location: " . URL . "Tablero");
@@ -43,7 +47,15 @@
 
 		public function avanzar(){
 			if ($_POST) {
-				$this->objetivo->avanzar($_POST['id_objetivo'], $_POST['porcentaje_avance']);
+				$this->objetivo->avanzar($_POST['id_objetivo'], $_POST['porcentaje_avance'], $_POST['comentario_avance']);
+			}
+
+			header("Location: " . URL . "Tablero");
+		}
+
+		public function comentar(){
+			if ($_POST) {
+				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario']);
 			}
 
 			header("Location: " . URL . "Tablero");
@@ -59,7 +71,7 @@
 				$this->objetivo->set('asignador', $_SESSION['id_usuario']);
 				$this->objetivo->set('objetivo_padre', $_POST['id_objetivo']);
 
-				$this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable']);
+				$this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable'], $_POST['comentario_asignacion']);
 			}
 
 			header("Location: " . URL . "Tablero");
@@ -74,7 +86,7 @@
 		              <p>Fechas: del ".formatearFecha($obj['fecha_asignacion'])." al ".formatearFecha($obj['fecha_vencimiento'])."</p>
 		              <p>Porcentaje de avance: ".$obj['avance']."%</p>";
 			}else{
-				echo 'json_encode(["responseText"=>"<form action="yates/editar/" method="POST">"])';
+				echo 'json_encode(["responseText"=>"<form action="wfwdf/editwdfar/" method="POST">"])';
 			}
 		}
 
@@ -94,7 +106,7 @@
 
 		public function equipo(){
 			$datos = '';
-			return $datos;
+			return ['vista' => 'equipo'];
 		}
 	} 
 

@@ -68,6 +68,13 @@
           </a>
         </li>
 
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Agenda">
+          <a class="nav-link" href="<?=URL?>Agenda">
+            <i class="fa fa-fw fa-calendar-check-o"></i>
+            <span class="nav-link-text">Agenda</span>
+          </a>
+        </li>
+
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Graficas">
           <a class="nav-link" href="charts.html">
             <i class="fa fa-fw fa-area-chart"></i>

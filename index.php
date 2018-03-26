@@ -10,6 +10,9 @@
 	// setlocale(LC_TIME,"es_MX");
 	// header("Content-Type: text/html;charset=utf-8");
 
+	date_default_timezone_set('America/Mexico_City');
+	setlocale(LC_TIME,"es_MX");
+	
 	Config\Autoload::run();
 
 	session_start(); #INICIALIZACION DE LA VARIABLE DE SESSION

@@ -9,6 +9,7 @@
 		private $puesto;
 		private $nivel;
 		private $usuario_jefe;
+		private $con;
 
 		public function __construct(){
 			$this->con = new Conexion();

@@ -1,5 +1,6 @@
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<?php   //var_dump($mis_objetivos); die; ?>
+<!-- ESTILO PARA UTILIZAR EL RANGEN PARA AVANZAR -->
+<link rel="stylesheet" href="<?=URL?>Views/template/css/jquery-ui.min.css">
+
 <div class="content-wrapper">
     <div class="container-fluid">
       <!-- Breadcrumbs-->
@@ -12,7 +13,7 @@
       <!-- Icon Cards-->
       <div class="row">
         <div class="col-9">
-          <h1> <i class="fa fa-fw fa-table"></i> Mis Tablero de Control (<?=$_SESSION['id_usuario']?>)</h1> 
+          <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero de Control (<?=$_SESSION['id_usuario']?>)</h1> 
         </div>
         <div class="col-3 text-right">
           <a class="btn btn-outline-info" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#nuevoModal"> 
@@ -59,6 +60,7 @@
                       <?php if ($_SESSION['permiso'] > 0) {?>
                       <option value="asignar-<?=$obj['id_objetivo']?>">Asignar</option>
                       <?php } ?>
+                      <option value="comentar-<?=$obj['id_objetivo']?>">Comentar</option>
                     </select>
                   </td>
                 </tr>  
@@ -145,6 +147,11 @@
             $( "#slider" ).slider( "value", opcion[2] );
             $( "#porcentaje-handler" ).text(opcion[2]);
             $('#avanzarModal').modal("show"); 
+
+
+        }else if(opval == "comentar") {
+            $('#comentar-id_objetivo').val(opcion[1]);
+            $('#comentarModal').modal("show"); 
         }
 
         $(this).val("seleccionar");
@@ -250,6 +257,46 @@
         </div>
       </div>
     </div>
+
+
+
+    <!-- Modal COMENTAR -->
+    <div class="modal fade" id="comentarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Comentar Objetivo</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="<?=URL?>tablero/comentar" enctype="multipart/form-data">
+              
+              <div class="form-group">
+                <label>Comentario</label>
+                <textarea class="form-control" name="comentario" rows="2"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Cargar archivo (opcional)</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="customFileLang" name="archivo" lang="es" accept="application/pdf, .doc, .docx, .xlsx, .xls">
+                  <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+              </div>
+              <input type="hidden" id="comentar-id_objetivo" name="id_objetivo">
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Aceptar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
     <!-- Modal VER -->
