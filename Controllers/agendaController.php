@@ -99,21 +99,41 @@
 
 								}
 							}
-		// var_dump( $fecha_aux ); die;
-		// var_dump('bay'); die;
-							
-							break;
-
-						case 'diario':
 							
 							break;
 							
 						case 'semanal':
-							
+							$fecha_inicio = strtotime( $_POST['fecha_inicio'] );
+							$aux = $fecha_inicio;
+
+							if ($_POST['radio-fin'] == 'for') {
+								$cont = 0;
+								while ( $cont < $_POST['repeticiones']) {
+									$fecha_aux = date('Y-m-d', $aux);
+									foreach ($_POST['dias_check'] as $dia) {
+										if ($dia == date('N',$aux)) {
+											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'] );
+											$cont++;
+										}
+									}
+									$aux = strtotime( $fecha_aux . ' +1 day' );
+								}
+
+							} else{
+							// por fecha limite
+								$fecha_fin = strtotime( $_POST['fecha_fin'] );
+								while ( $aux <= $fecha_fin ) {
+									$fecha_aux = date('Y-m-d', $aux);
+									foreach ($_POST['dias_check'] as $dia) {
+										if ($dia == date('N',$aux)) {
+											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'] );
+										}
+									}
+									$aux = strtotime( $fecha_aux . ' +1 day' );
+								}
+							}
 							break;
 					}
-
-
 
 				}else{
 					// solo es una cita a guardar

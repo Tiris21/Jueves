@@ -13,7 +13,7 @@
       <!-- Icon Cards-->
       <div class="row">
         <div class="col-9">
-          <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero de Control (<?=$_SESSION['id_usuario']?>)</h1> 
+          <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero de Control</h1>  <!-- (< ?=$_SESSION['nombre']?>) -->
         </div>
         <div class="col-3 text-right">
           <a class="btn btn-outline-info" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#nuevoModal"> 
@@ -30,14 +30,13 @@
                   <th>Objetivo</th>
                   <th>Fecha Inicio</th>
                   <th>Fecha Vencimiento</th>
-                  <th>Dias p. Vencimiento</th>
+                  <th>Dias p. Venc.</th>
                   <th>Estatus</th>
                   <th>T.A.</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-      
 
               <?php setlocale(LC_TIME,"es_MX");
                 foreach ($mis_objetivos as $obj) {
@@ -105,18 +104,19 @@
         var opval = opcion[0];
 
         if(opval=="ver"){ 
-            $.ajax({ 
-              type: "post",
-              url:  '<?=URL?>tablero/ajaxDetalleObjetivo', 
-              data: {
-                    id_obj: opcion[1],
-              },
-              success: function(result){
-                $('#ver-body').html(result);
-                // console.log(result);
-              }
-            });
-            $('#verModal').modal("show"); 
+            // $.ajax({ 
+            //   type: "post",
+            //   url:  '<?=URL?>tablero/ajaxDetalleObjetivo', 
+            //   data: {
+            //         id_obj: opcion[1],
+            //   },
+            //   success: function(result){
+            //     $('#ver-body').html(result);
+            //     // console.log(result);
+            //   }
+            // });
+            // $('#verModal').modal("show"); 
+            window.location.href = "<?=URL?>Objetivos/ver/"+opcion[1];
 
 
         }else if(opval == "asignar") {

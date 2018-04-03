@@ -3,6 +3,14 @@
 	color: #dc3545;
 }
 
+.btn-card-success:hover {
+	color: #dc3545;
+}
+
+.btn-card-warning:hover {
+	color: #ffc107;
+}
+
 .btn-card {
 	padding-top: 0px;
 	padding-bottom: 0px;

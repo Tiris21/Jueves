@@ -55,7 +55,15 @@
 
 		public function comentar(){
 			if ($_POST) {
-				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario']);
+				$archivo = null;
+				if ($archivo) {
+					$archivo = null;
+				}
+				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $archivo);
+				
+				if (isset($_POST['equipo'])) {
+					header("Location: " . URL . "Tablero/Equipo");
+				}
 			}
 
 			header("Location: " . URL . "Tablero");
@@ -105,8 +113,14 @@
 		}
 
 		public function equipo(){
-			$datos = '';
-			return ['vista' => 'equipo'];
+			// if (isset($_SESSION['login'])) { # el if solo es para que no marque error en el login porque es la pantalla principal (HOME)
+				$objetivos = $this->objetivo->listarObjetivosDeEquipo($_SESSION['id_usuario']);
+			// }else{
+			// 	$mis_objetivos = '';
+			// 	$mi_equipo = '';
+			// }
+
+			return ['vista' => 'equipo', 'objetivos' => $objetivos];
 		}
 	} 
 

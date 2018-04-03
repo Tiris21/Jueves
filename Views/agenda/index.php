@@ -159,7 +159,7 @@
 
               <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="check-periodicidad" name="check" value="ok" onchange="togglePerioricidad(this.checked)">
-                <label class="form-check-label">Programar periodicidad</label>
+                <label class="form-check-label" onclick="clickPeriodicidad();">Programar periodicidad</label>
               </div>
               
               <!-- CON PERIODICIDAD -->
@@ -167,8 +167,7 @@
                 
               <div class="form-group">
                 <label class="font-weight-bold">Frecuencia</label>
-                  <select class="custom-select form-control" name="frecuencia">
-                    <option value="diario" >Diario</option>
+                  <select class="custom-select form-control" name="frecuencia" onchange="cambioFrecuencia(this.value);">
                     <option value="semanal">Semanal</option>
                     <option value="mensual" selected>Mensual</option>
                   </select>
@@ -218,11 +217,51 @@
                 </div>
                 <div class="col-4 pl-0 mt-1"> de cada mes</div>
               </div>
-
-
               </div> <!-- mensual -->
               
 
+              <div id="semanal" style="display: none">
+              
+              <div class="row pt-1">
+                <div class="col-12">  
+                  
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="1">
+                    <label class="form-check-label">Lunes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="2">
+                    <label class="form-check-label">Martes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="3">
+                    <label class="form-check-label">Miércoles</label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row pt-3">
+                <div class="col-12">  
+                  
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="4">
+                    <label class="form-check-label">Jueves</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="5">
+                    <label class="form-check-label">Viernes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="dias_check[]" value="6">
+                    <label class="form-check-label">Sábado</label>
+                  </div>
+
+                </div>
+              </div>
+
+              </div> <!-- semanal -->
+              
 
               <!-- FINALIZACION  -->
               <label class="mt-4 font-weight-bold">Finalización</label> 
@@ -269,11 +308,23 @@
 
 <script>
   function togglePerioricidad(estado){
-      if(estado){
-        $('#con-repeticion').show();
-      }else{
+      $('#con-repeticion').toggle();
+  }
+
+  function clickPeriodicidad(){
+    var check = $('#check-periodicidad').prop('checked');
+      if(check){
+        $('#check-periodicidad').prop('checked', false);
         $('#con-repeticion').hide();
+      }else{
+        $('#check-periodicidad').prop('checked', true);
+        $('#con-repeticion').show();
       }
+  }
+
+  function cambioFrecuencia(op){
+      $('#mensual').toggle();
+      $('#semanal').toggle();
   }
 
   function validar(){

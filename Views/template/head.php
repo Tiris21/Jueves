@@ -17,6 +17,8 @@
     <link href="<?=URL?>Views/template/SB_Admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
   <!-- Custom styles for this template-->
     <link href="<?=URL?>Views/template/SB_Admin/css/sb-admin.css" rel="stylesheet">
+  <!-- Estilo para el timeline -->
+    <link href="<?=URL?>Views/template/css/timeline.css" rel="stylesheet">
   <!-- MI ESTILO-->
     <link href="<?=URL?>Views/template/css/miestilo.css" rel="stylesheet">
 

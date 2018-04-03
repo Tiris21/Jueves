@@ -5,18 +5,18 @@
         <li class="breadcrumb-item">
           <a href="#">Home</a>
         </li>
-        <li class="breadcrumb-item active">Mi Equipo</li>
+        <li class="breadcrumb-item">
+          <a href="<?=URL?>Equipo">Mi Equipo</a>
+        </li>
+        <li class="breadcrumb-item active">Equipo de <?= $usr['nombre'] ?></li>
       </ol>
       <!-- Icon Cards-->
       <div class="row">
         <div class="col-xl-12 col-sm-12 mb-3">
          
-          <h1> <i class="fa fa-fw fa-users mb-3"></i> Mi Equipo</h1>
-      <!-- <div class="card mb-3"> -->
-        <!-- <div class="card-header">
-          <i class="fa fa-table"></i> Data Table Example</div>
-        <div class="card-body"> -->
+          <h1> <i class="fa fa-fw fa-users mb-3"></i> Equipo de <?= $usr['nombre'] ?> </h1>
           <div class="table-responsive">
+            
             <table class="table table-bordered" id="dataTableEquipo" width="100%" cellspacing="0">
               <thead>
                 <tr>
@@ -27,39 +27,22 @@
                   <th>Acciones</th>
                 </tr>
               </thead>
-              <!-- <tfoot>
-                <tr>
-                  <td>234</td>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
-                  <td>
-                    <select class="custom-select" id="inputGroupSelect01">
-                      <option selected>Seleccionar..</option>
-                      <option value="1">Ver Objetivos</option>
-                      <option value="3">Asignar Objetivo</option>
-                      <option value="2">Eliminar</option>
-                    </select>
-                  </td>
-                </tr>
-              </tfoot> -->
               <tbody>
 
-              <?php foreach ($mi_equipo as $e) { ?>
+              <?php foreach ($equipo_subequipo as $e) { ?>
                 <tr>
                   <td><?= $e['id_usuario'] ?></td>
                   <td><?= $e['nombre'] ?></td>
                   <td><?= $e['puesto'] ?></td>
                   <td><?= $e['correo'] ?></td>
                   <td>
-                    <select class="custom-select acciones" id="select_acciones">
+                    <select class="custom-select acciones" id="select_acciones" >
                       <option selected value="seleccionar">Seleccionar..</option>
-                      <option value="tablero-<?=$e['id_usuario']?>">Ver Tablero</option>
-                      <option value="equipo-<?=$e['id_usuario']?>">Ver Equipo</option>
-                      <!-- <option value="equipo-<?=$e['id_usuario']?>">Ver Tablero de Equipo</option> -->
+                      <?php if ($tienen_equipo[$e['id_usuario']]) { ?>
+                        <option value="tablero-<?=$e['id_usuario']?>">Ver Tablero</option>
+                        <option value="equipo-<?=$e['id_usuario']?>">Ver Equipo</option>
+                        <!-- <option value="equipo-<?=$e['id_usuario']?>">Ver Tablero de Equipo</option> -->
+                      <?php } ?>
                     </select>
                   </td>
                 </tr>
@@ -67,6 +50,7 @@
                 
               </tbody>
             </table>
+
           </div>
         </div>
         
@@ -97,6 +81,8 @@ $(document).ready(function() {
         }
   });
 
+  $('#advertenciaModal').modal("show"); 
+  
 });
 
 
@@ -104,7 +90,7 @@ $('.acciones').change(function() {
   var opcion = $(this).val();
   opcion = opcion.split('-');
   var opval = opcion[0];
-alert(opval);
+
   if(opval == "equipo"){ 
       window.location.href = "<?=URL?>Equipo/Ver/"+opcion[1];
 
@@ -119,6 +105,30 @@ alert(opval);
 
   $(this).val("seleccionar");
 
+ 
+
 });
 
 </script>
+
+
+
+    <!-- Modal ADVERTENCIA -->
+    <div class="modal fade" id="advertenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ADVERTENCIA-</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body" id="ver-body">
+            <p>Lo siento no tienes permiso para ver el contenidio</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="button" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>

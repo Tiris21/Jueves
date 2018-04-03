@@ -58,7 +58,7 @@
 		}
 
 		public function viewId($id){
-			$query = 'SELECT e.*, s.nombre FROM estudiantes e INNER JOIN secciones s ON e.id_seccion = s.id WHERE id_usuario = '.$id;
+			$query = 'SELECT * FROM usuario WHERE id_usuario = '.$id;
 			$datos = $this->con->consultaRetorno($query);
 			$row = mysqli_fetch_assoc($datos);
 			return $row;

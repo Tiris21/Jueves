@@ -12,7 +12,7 @@
 
 		public function index(){
 			$datos = '';//$this->estudiante->listar();
-			return $datos;
+			return ['vista' => 'index'];
 		}
 	} 
 

@@ -10,12 +10,13 @@
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-          <a class="nav-link" href="Home">
+          <a class="nav-link" href="<?=URL?>Home">
             <i class="fa fa-fw fa-dashboard"></i>
             <span class="nav-link-text">Home</span>
           </a>
         </li>
 
+  <!--
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Objetivos">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseObjetivos" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-bullseye"></i>
@@ -28,7 +29,7 @@
             <li>
               <a href="<?=URL?>Objetivos/asignados">Objetivos Asignados</a>
             </li>
-            <!-- <li>
+           <li>
               <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Third Level</a>
               <ul class="sidenav-third-level collapse" id="collapseMulti2">
                 <li>
@@ -41,22 +42,22 @@
                   <a href="#">Third Level Item</a>
                 </li>
               </ul>
-            </li> -->
+            </li> 
           </ul>
         </li>
-
+  -->
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tablero">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseTablero" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-table"></i>
-            <span class="nav-link-text">Tableros de Control</span>
+            <span class="nav-link-text">Tableros</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseTablero">
             <li>
               <a href="<?=URL?>Tablero">Mi Tablero</a>
             </li>
             <li>
-              <a href="<?=URL?>Tablero/Equipo">Tablero de mi Equipo</a>
+              <a href="<?=URL?>Tablero/Equipo">Tablero De Mi Equipo</a>
             </li>
           </ul>
         </li>
@@ -75,12 +76,12 @@
           </a>
         </li>
 
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Graficas">
+        <!-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Graficas">
           <a class="nav-link" href="charts.html">
             <i class="fa fa-fw fa-area-chart"></i>
             <span class="nav-link-text">Gráficas</span>
           </a>
-        </li>
+        </li> -->
 
       </ul>
 

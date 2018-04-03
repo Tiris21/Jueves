@@ -11,7 +11,7 @@
 	// header("Content-Type: text/html;charset=utf-8");
 
 	date_default_timezone_set('America/Mexico_City');
-	setlocale(LC_TIME,"es_MX");
+	setlocale(LC_ALL,"es_ES");
 	
 	Config\Autoload::run();
 

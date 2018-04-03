@@ -35,6 +35,16 @@
 			return $this->con->consultaRetorno($query);
 		}
 
+		public function listarSubobjetivos($id_op){
+			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario WHERE objetivo_padre = ' . $id_op . ' AND o.estatus = "activo" AND u.estatus = "activo"';
+			return $this->con->consultaRetorno($query);
+		}
+
+		public function listarObjetivosDeEquipo($id_usuario){
+			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario AND u.usuario_jefe = "'.$id_usuario.'" WHERE o.estatus = "activo" AND u.estatus = "activo" ';
+			return $this->con->consultaRetorno($query);
+		}
+
 		public function viewId($id){
 			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario WHERE id_objetivo = '.$id;
 			$datos = $this->con->consultaRetorno($query);
@@ -54,10 +64,12 @@
 		}
 
 		public function avanzar($id, $porcentaje, $comentario){
+			$obj = $this->viewId($id);
+
 			$query = 'UPDATE objetivo SET avance = '.$porcentaje.'  WHERE id_objetivo = '.$id;
 			$this->con->consultaSimple($query);
 			//ACCION
-			$this->accion->addAvanzar($id, $comentario);
+			$this->accion->addAvanzar($id, $comentario, $obj['avance'], $porcentaje);
 			// METODO RECURSIVO D: NAA JUST KIDDIN :3
 			$this->setAvancePadres($id);
 			
@@ -68,7 +80,7 @@
 				$this->set('responsable', $responsable);
 				$id_nuevo = $this->add();
 				//ACCION
-				$this->accion->addApropiar($id_nuevo, $responsable);
+				$this->accion->addApropiar($id_nuevo, $responsable, $id);
 			}
 
 			$query = 'UPDATE objetivo SET tipo_avance = "asignado", avance = '.$this->getPorcentajeAvance($id).'  WHERE id_objetivo = '.$id;
