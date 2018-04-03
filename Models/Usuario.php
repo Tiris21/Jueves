@@ -63,6 +63,25 @@
 			$row = mysqli_fetch_assoc($datos);
 			return $row;
 		}
+
+		public function permisoJerarquico($usr_gfe, $usuario_objetivo){
+			# AH PERRO UN RECURSIVO
+			$el_equipo_de = $this->listarMiEquipo($usr_gfe);
+			
+			foreach ($el_equipo_de as $sub) {
+				if ($sub['id_usuario'] == $usuario_objetivo) {
+					return 'eaaaa';
+				}else {
+					// si la funcion regresa null, no retorna nada para que pase al siguiente paso del foreach
+					$aux = $this->permisoJerarquico($sub['id_usuario'], $usuario_objetivo);
+					if ( ! is_null($aux) ) {
+						return $aux;
+					}
+				}
+				
+			}
+
+		}
 		
 
 	}

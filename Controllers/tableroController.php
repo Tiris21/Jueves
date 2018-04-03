@@ -64,6 +64,10 @@
 				if (isset($_POST['equipo'])) {
 					header("Location: " . URL . "Tablero/Equipo");
 				}
+
+				if (isset($_POST['tablero_ver'])) {
+					header("Location: " . URL . "Equipo/Tablero/" . $_POST['tablero_ver']);
+				}
 			}
 
 			header("Location: " . URL . "Tablero");

@@ -58,8 +58,10 @@
                     <select class="custom-select acciones" id="select_acciones">
                       <option selected value="seleccionar">Seleccionar..</option>
                       <option value="tablero-<?=$e['id_usuario']?>">Ver Tablero</option>
-                      <option value="equipo-<?=$e['id_usuario']?>">Ver Equipo</option>
-                      <!-- <option value="equipo-<?=$e['id_usuario']?>">Ver Tablero de Equipo</option> -->
+                      <?php if ($tienen_equipo[$e['id_usuario']]) { ?>
+                        <option value="equipo-<?=$e['id_usuario']?>">Ver Equipo</option>
+                        <!-- <option value="equipo-<?=$e['id_usuario']?>">Ver Tablero de Equipo</option> -->
+                      <?php } ?>
                     </select>
                   </td>
                 </tr>
@@ -104,7 +106,7 @@ $('.acciones').change(function() {
   var opcion = $(this).val();
   opcion = opcion.split('-');
   var opval = opcion[0];
-alert(opval);
+
   if(opval == "equipo"){ 
       window.location.href = "<?=URL?>Equipo/Ver/"+opcion[1];
 

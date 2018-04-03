@@ -38,8 +38,8 @@
                   <td>
                     <select class="custom-select acciones" id="select_acciones" >
                       <option selected value="seleccionar">Seleccionar..</option>
+                      <option value="tablero-<?=$e['id_usuario']?>">Ver Tablero</option>
                       <?php if ($tienen_equipo[$e['id_usuario']]) { ?>
-                        <option value="tablero-<?=$e['id_usuario']?>">Ver Tablero</option>
                         <option value="equipo-<?=$e['id_usuario']?>">Ver Equipo</option>
                         <!-- <option value="equipo-<?=$e['id_usuario']?>">Ver Tablero de Equipo</option> -->
                       <?php } ?>
@@ -81,8 +81,15 @@ $(document).ready(function() {
         }
   });
 
-  $('#advertenciaModal').modal("show"); 
-  
+  if ("<?=$puede_ver?>" == "carefully") {
+
+    $('#advertenciaModal').on('hidden.bs.modal', function (e) {
+        window.location.href = "<?=URL?>Equipo";
+    })
+    $('#advertenciaModal').modal("show"); 
+
+  }
+
 });
 
 
@@ -115,19 +122,21 @@ $('.acciones').change(function() {
 
     <!-- Modal ADVERTENCIA -->
     <div class="modal fade" id="advertenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">ADVERTENCIA-</h5>
+            <h5 class="modal-title" id="exampleModalLabel">ADVERTENCIA!</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body" id="ver-body">
-            <p>Lo siento no tienes permiso para ver el contenidio</p>
+            <p> <strong> Lo siento, no tienes permiso para ver el contenido de esta página :( </strong> </p>
+            <p> <strong> Se te redericcionará a la pagina de tú equipo </strong> </p>
+            <p class="text-center text-danger" style="font-size: 12em;"> <i class="fa fa-ban" aria-hidden="true"></i> </p>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary" type="button" data-dismiss="modal">Aceptar</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
       </div>
