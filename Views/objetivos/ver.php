@@ -25,8 +25,8 @@
             <?php if ($obj['tipo_avance'] != 'asignado'){ ?>
             <a class="btn btn-outline-primary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
               <i class="fa fa-fw fa-arrow-up"></i> Avanzar </a>
-            <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
-              <i class="fa fa-fw fa-support"></i> Asignar </a>
+            <!-- <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
+              <i class="fa fa-fw fa-support"></i> Asignar </a> -->
             <?php }?>
           </div>
         <?php } ?>

@@ -25,7 +25,8 @@
 						$_SESSION['id_usuario'] = $user['id_usuario'];
 						$_SESSION['permiso'] = $user['nivel'];
 						$_SESSION['nombre'] = $user['nombre'];
-						header("Location: " . URL . "tablero");
+						$this->usuario->setLastLogin($user['id_usuario']);
+						header("Location: " . URL . "home");
 					}
 				}
 

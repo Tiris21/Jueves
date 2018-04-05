@@ -9,6 +9,8 @@
 		private $puesto;
 		private $nivel;
 		private $usuario_jefe;
+		private $last_login;
+
 		private $con;
 
 		public function __construct(){
@@ -50,13 +52,6 @@
 			$this->con->consultaSimple($query);
 		}
 
-		public function view(){
-			$query = 'SELECT e.*, s.nombre FROM estudiantes e INNER JOIN secciones s ON e.id_seccion = s.id WHERE e.id = '.$this->id;
-			$datos = $this->con->consultaRetorno($query);
-			$row = mysqli_fetch_assoc($datos);
-			return $row;
-		}
-
 		public function viewId($id){
 			$query = 'SELECT * FROM usuario WHERE id_usuario = '.$id;
 			$datos = $this->con->consultaRetorno($query);
@@ -81,6 +76,12 @@
 				
 			}
 
+		}
+
+		// actualizza el campo de last_login
+		public function setLastLogin($id){
+			$query = "UPDATE usuario SET last_login = NOW() WHERE id_usuario = ".$id;
+			$this->con->consultaSimple($query);
 		}
 		
 

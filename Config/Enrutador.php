@@ -41,12 +41,17 @@
 
 			// Cargar vista
 			// session_start(); #INICIALIZACION DE LA VARIABLE DE SESSION
-			if ( ($request->getControlador() == 'login' && $request->getMetodo() == 'index') || ( !isset($_SESSION['id_usuario'])) ) {
-			// SI NO ESTA LOGGEADO O ENTRA AL INDEX CONTROLADOR DEL LOGIN
+			if ( $request->getControlador() == 'login' && $request->getMetodo() == 'index' ) {
+			// SI ENTRA AL INDEX CONTROLADOR DEL LOGIN
 				
 				$ruta_login = ROOT . 'Views' . DS . 'template' . DS . 'login.php';
 				require_once $ruta_login;
 
+			} else if (!isset($_SESSION['id_usuario'])) {
+			// SI NO ESTA LOGGEADO -> REDIRECCIONAR AL LOGIN
+			
+				header("Location: " . URL . "login");
+				
 			}else{
 			// SI ESTA LOGGEADO Y CARGA UNA VISTA DISTINTA AL INDEX DEL LOGIN 
 				if ($vista) {

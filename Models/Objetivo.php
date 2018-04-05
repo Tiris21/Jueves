@@ -96,8 +96,15 @@
 			$id_objetivopadre = $this->getObjetivoPadre($id_hijo);
 
 			while( $id_objetivopadre > 0){
-				$query = 'UPDATE objetivo SET avance = '.$this->getPorcentajeAvance($id_objetivopadre).'  WHERE id_objetivo = '.$id_objetivopadre;
+				$porcentaje = $this->getPorcentajeAvance($id_objetivopadre);
+				$query = 'UPDATE objetivo SET avance = '.$porcentaje.'  WHERE id_objetivo = '.$id_objetivopadre;
 				$this->con->consultaSimple($query);
+				
+					//ACCION esto se agrego sobre la marcha
+					$obj = $this->viewId($id_objetivopadre); 
+					$this->accion->addAvanzar($id_objetivopadre, "Avance ocacionado por un objetivo de un nivel abajo (".$id_objetivopadre.")", $obj['avance'], $porcentaje);
+					// hasta aqui juer juer
+				
 				$id_objetivopadre = $this->getObjetivoPadre($id_objetivopadre);
 			}
 		}

@@ -154,7 +154,7 @@
           </div>
           <div class="modal-body" id="ver-body">
             <p> <strong> Lo siento, no tienes permiso para ver el contenido de esta página :( </strong> </p>
-            <p> <strong> Se te redericcionará a la pagina de tú equipo </strong> </p>
+            <p> <strong> Se te redericcionará a la pagina de tu equipo </strong> </p>
             <p class="text-center text-danger" style="font-size: 12em;"> <i class="fa fa-ban" aria-hidden="true"></i> </p>
           </div>
           <div class="modal-footer">

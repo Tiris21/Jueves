@@ -17,7 +17,7 @@
 				$this->argumento = $ruta;// ($ruta) ?  strtolower( array_shift($ruta) ) : null ;
 			}
 			else{
-				$this->controlador = 'tablero';
+				$this->controlador = 'home';
 				$this->metodo = 'index';
 				# PARA QUE SI ENTRE AL CONTROLADOR
 				// header("Location: " . URL . "Tablero");

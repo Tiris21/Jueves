@@ -1,17 +1,22 @@
 <?php namespace Controllers;
 	
-	//use Models\Estudiante as Estudiante;
+	use Models\Dashboard as Dashboard;
 
 	class homeController{
 
-		// private $estudiante;
+		private $dashboard;
 
 		public function __construct(){
-			//$this->estudiante = new Estudiante();
+			$this->dashboard = new Dashboard();
 		}
 
 		public function index(){
-			$datos = '';//$this->estudiante->listar();
+			
+			$citas = $this->dashboard->getCitasNuevas($_SESSION['id_usuario']);
+			$avances = $this->dashboard->getAvancesNuevos($_SESSION['id_usuario']);
+			$comentarios = $this->dashboard->getComentariosNuevos($_SESSION['id_usuario']);
+			$asignaciones = $this->dashboard->getAsignacionesNuevas($_SESSION['id_usuario']);
+var_dump($asignaciones); die;
 			return ['vista' => 'index'];
 		}
 	} 
