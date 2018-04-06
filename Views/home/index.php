@@ -22,9 +22,9 @@
               <div class="card-body-icon">
                 <i class="fa fa-fw fa-calendar-check-o"></i>
               </div>
-              <div class="mr-5"> <span style="font-size: 40px">26</span> Citas Nuevas</div>
+              <div class="mr-5"> <span style="font-size: 40px"> <?= ($citas == '1') ? '1 </span> Cita Nueva</div>' : $citas.'</span> Citas Nuevas</div>' ?>
             </div>
-            <a class="card-footer bg-light text-success clearfix small z-1" href="#">
+            <a class="card-footer bg-light text-success clearfix small z-1" href="<?=URL?>Agenda">
               <span class="float-left">Ver Detalles</span>
               <span class="float-right">
                 <i class="fa fa-angle-right"></i>
@@ -39,9 +39,9 @@
               <div class="card-body-icon">
                 <i class="fa fa-fw fa-arrow-up"></i>
               </div>
-              <div class="mr-5"> <span style="font-size: 40px">26</span> Avances Nuevos</div>
+              <div class="mr-5"> <span style="font-size: 40px"><?= ($avances == '1') ? '1 </span> Avance Nuevo </div>' : $avances.'</span> Avances Nuevos</div>' ?>
             </div>
-            <a class="card-footer bg-light text-primary clearfix small z-1" href="#">
+            <a class="card-footer bg-light text-primary clearfix small z-1" href="<?=URL?>Tablero">
               <span class="float-left">Ver Detalles</span>
               <span class="float-right">
                 <i class="fa fa-angle-right"></i>
@@ -56,9 +56,9 @@
               <div class="card-body-icon">
                 <i class="fa fa-fw fa-comment"></i>
               </div>
-              <div class="mr-5"> <span style="font-size: 40px">26</span> Comentarios Nuevos</div>
+              <div class="mr-5"> <span style="font-size: 40px"> <?= ($comentarios == '1') ? '1 </span> Comentario Nuevo</div>' : $comentarios.'</span> Comentarios Nuevos</div>' ?>
             </div>
-            <a class="card-footer bg-light text-secondary clearfix small z-1" href="#">
+            <a class="card-footer bg-light text-secondary clearfix small z-1" href="<?=URL?>Tablero">
               <span class="float-left">Ver Detalles</span>
               <span class="float-right">
                 <i class="fa fa-angle-right"></i>
@@ -73,9 +73,9 @@
               <div class="card-body-icon">
                 <i class="fa fa-fw fa-support"></i>
               </div>
-              <div class="mr-5"> <span style="font-size: 40px">26</span> Asignaciones Nuevas</div>
+              <div class="mr-5"> <span style="font-size: 40px"> <?= ($asignaciones == '1') ? '1 </span> Asignacion Nueva</div>' : $asignaciones.'</span> Asignaciones Nuevas</div>' ?>
             </div>
-            <a class="card-footer bg-light text-danger clearfix small z-1" href="#">
+            <a class="card-footer bg-light text-danger clearfix small z-1" href="<?=URL?>Tablero">
               <span class="float-left">Ver Detalles</span>
               <span class="float-right">
                 <i class="fa fa-angle-right"></i>
@@ -99,43 +99,19 @@
 
             <div class="list-group list-group-flush small">
 
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
+              <?php foreach ($next_dates as $date) { ?>
+                  <a class="list-group-item list-group-item-action" href="<?=URL?>Agenda">
+                    <div class="media">
+                      <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                      <div class="media-body">
+                        <strong><?=$date['titulo']?></strong>
+                        <div class="text-muted smaller"><strong>Fecha de la junta: </strong> <?=formatearFechaHora($date['fecha']);?></div>
+                      </div>
+                    </div>
+                  </a>
+              <?php } ?>
 
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">Ir a la agenda</a>
+              <a class="list-group-item list-group-item-action" href="<?=URL?>Agenda">Ir a la agenda</a>
 
             </div>
           </div>                                                                                                                                          
@@ -150,43 +126,19 @@
 
             <div class="list-group list-group-flush small">
 
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
+              <?php foreach ($next_expire as $exp) { ?>
+                  <a class="list-group-item list-group-item-action" href="<?=URL?>Objetivos/ver/<?=$exp['id_objetivo']?>">
+                    <div class="media">
+                      <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                      <div class="media-body">
+                        <strong><?=$exp['titulo']?></strong>
+                        <div class="text-muted smaller"> <strong>Fecha de vencimiento: </strong> <?=formatearFecha($date['fecha']);?></div>
+                      </div>
+                    </div>
+                  </a>
+              <?php } ?>
 
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <div class="media-body">
-                    <strong>Este sera el titulo de la cita</strong>
-                    <div class="text-muted smaller">12/Abr/2018 a las 5:43 PM</div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="list-group-item list-group-item-action" href="#">Ir a la agenda</a>
+              <a class="list-group-item list-group-item-action" href="<?=URL?>Tablero">Ir al tablero</a>
 
             </div>
           </div>                                                                                                                                          
@@ -220,7 +172,7 @@
     data: {
       labels: ["Rojos", "Amarillos", "Verdes"],
       datasets: [{
-        data: [15.58, 11.25, 8.32],
+        data: [ <?= $grafica[0] ?>,  <?= $grafica[1] ?>,  <?= $grafica[2] ?> ],
         backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
       }],
     },
