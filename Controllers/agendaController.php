@@ -50,7 +50,7 @@
 								if ($_POST['radio-fin'] == 'for') {
 								// finalizar por cantiddad de repeticiones
 									for( $r=1; $r <= $_POST['repeticiones']; $r++){
-										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'] );
+										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 										$aux = strtotime( $fecha_aux . ' +1 month' );
 										$fecha_aux = date('Y-m-d H:i',$aux);
 									}
@@ -59,7 +59,7 @@
 								// finalizar por fecha limite
 									$fecha_fin = strtotime( $_POST['fecha_fin'] );
 									while ( $aux <= $fecha_fin) {
-										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'] );
+										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 										$aux = strtotime( $fecha_aux . ' +1 month' );
 										$fecha_aux = date('Y-m-d H:i',$aux);
 									}
@@ -81,7 +81,7 @@
 								if ($_POST['radio-fin'] == 'for') {
 								// finalizar por cantiddad de repeticiones
 									for( $r=1; $r <= $_POST['repeticiones']; $r++){
-										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'] );
+										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 										$fecha_date->modify('+1 month');
 										$fecha_aux = $fecha_date->modify($str)->format('Y-m-d') . ' ' . $_POST['hora'] ;
 									}
@@ -91,9 +91,9 @@
 									$fecha_fin = strtotime( $_POST['fecha_fin'] );
 									$aux = strtotime($fecha_aux);
 									while ( $aux <= $fecha_fin) {
-										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'] );
+										$this->agregarCita( $fecha_aux, $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 										$fecha_date->modify('+1 month');
-										$fecha_aux = $fecha_date->modify($str)->format('Y-m-d') . ' ' . $_POST['hora'] ;
+										$fecha_aux = $fecha_date->modify($str)->format('Y-m-d') . ' ' . $_POST['hora'];
 										$aux = strtotime($fecha_aux);
 									}
 
@@ -112,7 +112,7 @@
 									$fecha_aux = date('Y-m-d', $aux);
 									foreach ($_POST['dias_check'] as $dia) {
 										if ($dia == date('N',$aux)) {
-											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'] );
+											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 											$cont++;
 										}
 									}
@@ -126,7 +126,7 @@
 									$fecha_aux = date('Y-m-d', $aux);
 									foreach ($_POST['dias_check'] as $dia) {
 										if ($dia == date('N',$aux)) {
-											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'] );
+											$this->agregarCita( $fecha_aux . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'], $_POST['objetivo'] );
 										}
 									}
 									$aux = strtotime( $fecha_aux . ' +1 day' );
@@ -137,7 +137,7 @@
 
 				}else{
 					// solo es una cita a guardar
-					agregarCita($_POST['fecha_inicio'] . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables']);
+					agregarCita($_POST['fecha_inicio'] . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'], $_POST['objetivo']);
 				}
 			}
 
@@ -145,10 +145,11 @@
 		}
 
 
-	private function agregarCita($f, $t, $u){
+	private function agregarCita($f, $t, $u, $o){
 		$this->cita->set('fecha', $f);
 		$this->cita->set('titulo', $t);
 		$this->cita->set('usuarios', $u);
+		$this->cita->set('id_objetivo', $o);
 		$this->cita->add();
 	} 
 

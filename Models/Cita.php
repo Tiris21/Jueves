@@ -6,6 +6,7 @@
 		private $titulo;
 		private $estatus;
 		private $usuarios;
+		private $id_objetivo;
 
 		private $con;
 
@@ -28,7 +29,7 @@
 
 
 		public function add(){
-			$query = "INSERT INTO cita SET fecha = '{$this->fecha}', titulo = '{$this->titulo}', estatus = 'activo';";
+			$query = "INSERT INTO cita SET fecha = '{$this->fecha}', titulo = '{$this->titulo}', id_objetivo = '{$this->id_objetivo}', estatus = 'activo';";
 			$id_cita = $this->con->consultaSimpleID($query);
 
 			$query = "INSERT INTO cita_usuario SET id_cita = '{$id_cita}', id_usuario = " . $_SESSION['id_usuario'];

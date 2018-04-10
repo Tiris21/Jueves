@@ -55,11 +55,24 @@
 
 		public function comentar(){
 			if ($_POST) {
-				$archivo = null;
+				$file_name = '';
+				$archivo = $_FILES['archivo'];
 				if ($archivo) {
-					$archivo = null;
+					
+					if ($archivo['size'] < 10000000){
+
+						$file_name = $archivo['name'];
+						$file_name = str_replace(' ', '', $file_name);
+						$file_name = str_replace('ñ', 'n', $file_name);
+						$file_name = str_replace('Ñ', 'N', $file_name);
+
+						$add = "Archivos/$file_name";
+						
+						move_uploaded_file ($archivo['tmp_name'], $add);
+					}
 				}
-				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $archivo);
+
+				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $file_name);
 				
 				if (isset($_POST['equipo'])) {
 					header("Location: " . URL . "Tablero/Equipo");

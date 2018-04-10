@@ -12,7 +12,7 @@
       </ol>
       <!-- Icon Cards-->
       <div class="row mb-3">
-        <div class="col-xl-9 col-sm-9">
+        <div class="col-lg-9">
           <h1> <i class="fa fa-fw fa-calendar-check-o mb-3"></i> Mi Agenda</h1>
         </div>
         <div class="col-3 text-right">
@@ -120,12 +120,13 @@
 
               <div class="form-group">
                 <label>Objetivo a revisar</label>
-                <select class="custom-select form-control" name="objetivo">
-                  <option selected>Seleccionar...</option>
+                <select class="custom-select form-control" name="objetivo" id="objetivo">
+                  <option selected value="">Seleccionar...</option>
                   <?php foreach ($mis_objetivos as $obj) { ?>
                     <option value="<?=$obj['id_objetivo']?>"><?=$obj['titulo']?></option>
                   <?php } ?>
                 </select>
+                <div class="invalid-feedback">Selecciona al menos un dfsdfadsasistente</div>
               </div>
               
               <div class="row">
@@ -140,6 +141,7 @@
                   <div class="form-group">
                     <label>Hora</label>
                     <input type="time" value="<?=date("H:i")?>" class="form-control" id="hora" name="hora" onchange="//alert(this.value)">
+                    <div class="invalid-feedback">Ingresa un horario valido</div>
                   </div>
                 </div>
               </div>
@@ -178,13 +180,14 @@
               <div class="row">
                 <div class="col-2 pr-0 mt-1">  
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radio-mensual" value="numero" checked>
+                    <input class="form-check-input" type="radio" name="radio-mensual" id="radio-mensual-numero" value="numero" checked>
                     <label class="form-check-label"> El día </label>
                   </div>
                 </div>
                 <div class="col-2 pl-0">  
                   <div class="form-group">
-                      <input type="number" value="<?=date("d")?>" name="dia_mensual" class="form-control form-control-sm">
+                      <input type="number" value="<?=date("d")?>" name="dia_mensual" id="dia_mensual" min="1" max="31" class="form-control form-control-sm">
+                      <div class="invalid-feedback">Ingresa un valor válido</div>
                   </div>
                 </div>
                 <div class="col-8 pl-0 mt-1"> de cada mes</div>
@@ -193,7 +196,7 @@
               <div class="row">
                 <div class="col-2 pr-0 mt-1">  
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radio-mensual" value="dia" checked>
+                    <input class="form-check-input" type="radio" id="radio-mensual-dia" name="radio-mensual" value="dia" checked>
                     <label class="form-check-label"> El </label>
                   </div>
                 </div>
@@ -268,13 +271,14 @@
               <div class="row">
                 <div class="col-5 pr-0 mt-1">  
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radio-fin" value="for" checked>
+                    <input class="form-check-input" type="radio" name="radio-fin" id="radio-fin-for" value="for" checked>
                     <label class="form-check-label"> Cant. de repeticiones </label>
                   </div>
                 </div>
                 <div class="col-3 pl-0">  
                   <div class="form-group">
-                      <input type="number" value="10" name="repeticiones" class="form-control form-control-sm">
+                      <input type="number" value="10" name="repeticiones" id="repeticiones" class="form-control form-control-sm">
+                      <div class="invalid-feedback">Ingresa un valor válido</div>
                   </div>
                 </div>
               </div>
@@ -282,12 +286,13 @@
               <div class="row">
                 <div class="col-3 pr-0 mt-1">  
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radio-fin" value="while" checked>
+                    <input class="form-check-input" type="radio" name="radio-fin" id="radio-fin-while"  value="while" checked>
                     <label class="form-check-label"> Finalizar el  </label>
                   </div>
                 </div>
                 <div class="col-4 pl-0">  
-                    <input type="date" value="<?=date("Y-m-d")?>" name="fecha_fin" class="form-control form-control-sm">
+                    <input type="date" value="<?=date("Y-m-d")?>" name="fecha_fin" id="fecha_fin" class="form-control form-control-sm">
+                    <div class="invalid-feedback">Ingresa una fecha mayor a la fecha de inicio</div>
                 </div>
               </div>
 
@@ -334,11 +339,9 @@
 
     elementos.push('#titulo');
     selects.push('#responsable');
+    // selects.push('#objetivo'); no es obligatorio
 
-
-// alert(  $(elementos[i]).next().text()  );
-// console.log(  $(elementos[1]).val().length  );
-
+    // VALIDACION DE INPUT TEXT
     for (var i = 0; i < elementos.length ; i++) {
       if ( $(elementos[i]).val() == '' || $(elementos[i]).val().length < 5) {
           $(elementos[i]).addClass('is-invalid');
@@ -348,6 +351,7 @@
       }
     }
 
+    // VALIDACION DE SELECT
     for (var i = 0; i < selects.length ; i++) {
       if ( $(selects[i]).val().length == 0) {
           $(selects[i]).addClass('is-invalid');
@@ -357,10 +361,67 @@
       }
     }
 
+    // VALIDACION DE FECHAININCIO
+    var fecha_inicio = moment(  $("#fecha_inicio").val()  ); 
+    var now = moment(); 
 
-
-    if (validado) {
-      $('form').submit();
+    if (fecha_inicio < now) {
+        $("#fecha_inicio").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#fecha_inicio").removeClass('is-invalid');
     }
+
+    // VALIDACION HORA
+    var hora1 = '08:00';
+    var hora2 = '22:00';
+    if ( $('#hora').val() < hora1 || $('#hora').val() > hora2 ) {
+        $("#hora").addClass('is-invalid');
+        validado = false;
+    }else { 
+        $("#hora").removeClass('is-invalid');
+    }
+
+    // VALIDACION DIA MES
+    if ( $('#radio-mensual-numero').prop('checked') ) { 
+      if ( $('#dia_mensual').val() < 1 || $('#dia_mensual').val() > 31 ) {
+          $("#dia_mensual").addClass('is-invalid');
+          validado = false;
+      }else{
+          $("#dia_mensual").removeClass('is-invalid');
+      }
+    }
+
+    // VALIDACION CANT DE REPETICIONES
+    if ( $('#radio-fin-for').prop('checked') ) {
+      if ( $('#repeticiones').val() < 1 || $('#repeticiones').val() > 25 ) {
+          $("#repeticiones").addClass('is-invalid');
+          validado = false;
+      }else{
+          $("#repeticiones").removeClass('is-invalid');
+      }
+    }else{
+          $("#repeticiones").removeClass('is-invalid');
+    }
+
+    // VALIDACION FECHA FINALIZACION
+    if ( $('#radio-fin-while').prop('checked') && $('#check-periodicidad').prop('checked') ) {
+      var fecha_termino = moment(  $("#fecha_fin").val()  );
+      if ( fecha_termino < fecha_inicio ) {
+          $("#fecha_fin").addClass('is-invalid');
+          validado = false;
+      }else{
+          $("#fecha_fin").removeClass('is-invalid');
+      }
+    }else{
+          $("#fecha_fin").removeClass('is-invalid');
+    }
+
+    // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
+    if (validado) {
+        $('form').submit();
+    }
+  
   }
+
 </script>

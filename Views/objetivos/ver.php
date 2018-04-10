@@ -219,6 +219,9 @@
                                     <?php if ($a['comentario'] != ''){ ?>                                            
                                           <p>"<i><?=$a['comentario']?></i>"</p>
                                     <?php } ?>
+                                    <?php if ($a['aux1'] != ''){ ?>                                            
+                                          <p>El comentario lleva un archivo adjunto <a href="<?=URL?>Objetivos/descargar/<?=$a['aux1']?>" ><?=$a['aux1']?></a></p>
+                                    <?php } ?>
                                       </div>
                                   </div>
                               </li>
@@ -298,12 +301,10 @@
             </div>
 
             <div class="form-group">
-              <label>Cargar archivo (opcional)</label>
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFileLang" name="archivo" lang="es" accept="application/pdf, .doc, .docx, .xlsx, .xls">
-                <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
-              </div>
+              <label for="archivo">Cargar archivo (opcional)</label>
+              <input type="file" class="form-control-file" id="archivo" name="archivo" accept="application/pdf, .doc, .docx, .xlsx, .xls">
             </div>
+
             <input type="hidden" id="comentar-id_objetivo" name="id_objetivo" value="<?=$obj['id_objetivo']?>">
 
         </div>
@@ -373,5 +374,39 @@
     $('#avanzar-porcentaje').val(<?=$obj['$avance']?>);
     $( "#slider" ).slider( "value", <?=$obj['$avance']?> );
     $( "#porcentaje-handler" ).text( <?=$obj['$avance']?> );
-  } );
+
+
+
+  function downloadLink(archivo) {
+        var ajaxOptions = {
+          url: '<?=URL?>Archivos/' + archivo
+        };
+          
+        var res = $.ajax(ajaxOptions);
+        
+        function onAjaxDone(data) {
+            location.href = '<?=URL?>Archivos/' + archivo;
+        }
+        
+        function onAjaxFail() {
+          alert('Bad ID');
+        }
+        
+        res
+          .done(onAjaxDone)
+            .fail(onAjaxFail)
+        ;
+  }
+    
+  function onDownloadLinkClick(archivo) {
+      e.preventDefault();
+        downloadLink(archivo);
+  }
+    
+  // $('#download-link').on('click', onDownloadLinkClick);
+
+
+});
+
+
 </script>

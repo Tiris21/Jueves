@@ -40,15 +40,38 @@
 
 		public function comentar(){
 			if ($_POST) {
-				$archivo = null;
+
+			// var_dump($_POST['archivo']); die;
+				$file_name = '';
+				$archivo = $_FILES['archivo'];
 				if ($archivo) {
-					$archivo = null;
+
+					if ($archivo['size'] < 10000000){
+
+						// if (!($_FILES[uploadedfile][type] =="image/pjpeg" OR $_FILES[uploadedfile][type] =="image/gif")) {
+						// 	$msg=$msg." Tu archivo tiene que ser JPG o GIF. Otros archivos no son permitidos<BR>";
+						// 	$uploadedfileload="false";
+						// }
+
+						$file_name = $archivo['name'];
+						$file_name = str_replace(' ', '', $file_name);
+						$file_name = str_replace('ñ', 'n', $file_name);
+						$file_name = str_replace('Ñ', 'N', $file_name);
+						// $file_name = trim($file_name);
+						$add = "Archivos/$file_name";
+						
+						move_uploaded_file ($archivo['tmp_name'], $add);
+						// if(move_uploaded_file ($archivo['tmp_name'], $add)){
+						
+					}
+
 				}
-				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $archivo);
+				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $file_name);
 			}
 
 			header("Location: " . URL . "Objetivos/Ver/" . $_POST['id_objetivo']);
 		}
+
 
 		public function avanzar(){
 			if ($_POST) {
@@ -56,6 +79,13 @@
 			}
 
 			header("Location: " . URL . "Objetivos/Ver/" . $_POST['id_objetivo']);
+		}
+
+
+
+		public function descargar($archivo){
+			header("Content-disposition: attachment; filename=Archivos/".$archivo);
+			readfile("Archivos/".$archivo);
 		}
 	} 
 

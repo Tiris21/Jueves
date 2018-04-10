@@ -279,12 +279,10 @@
               </div>
 
               <div class="form-group">
-                <label>Cargar archivo (opcional)</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="customFileLang" name="archivo" lang="es" accept="application/pdf, .doc, .docx, .xlsx, .xls">
-                  <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
-                </div>
+                <label for="archivo">Cargar archivo (opcional)</label>
+                <input type="file" class="form-control-file" id="archivo" name="archivo" accept="application/pdf, .doc, .docx, .xlsx, .xls">
               </div>
+
               <input type="hidden" id="comentar-id_objetivo" name="id_objetivo">
 
           </div>
