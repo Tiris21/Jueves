@@ -37,6 +37,7 @@
 				$this->objetivo->set('fecha_vencimiento', $_POST['fecha_vencimiento']);
 				$this->objetivo->set('responsable', $_SESSION['id_usuario']);
 				$this->objetivo->set('asignador', $_SESSION['id_usuario']);
+				$this->objetivo->set('prioridad', $_POST['prioridad']);
 				$this->objetivo->set('objetivo_padre', 0);
 				
 				$this->objetivo->crear();
@@ -97,6 +98,9 @@
 				$this->objetivo->set('objetivo_padre', $_POST['id_objetivo']);
 
 				$this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable'], $_POST['comentario_asignacion']);
+				if (isset($_POST['de_ver'])) {
+					header("Location: " . URL . "Objetivos/ver/" . $_POST['de_ver']);
+				}
 			}
 
 			header("Location: " . URL . "Tablero");

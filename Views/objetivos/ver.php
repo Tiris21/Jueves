@@ -25,9 +25,9 @@
             <?php if ($obj['tipo_avance'] != 'asignado'){ ?>
             <a class="btn btn-outline-primary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
               <i class="fa fa-fw fa-arrow-up"></i> Avanzar </a>
-            <!-- <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
-              <i class="fa fa-fw fa-support"></i> Asignar </a> -->
             <?php }?>
+            <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#asignarModal"> 
+              <i class="fa fa-fw fa-support"></i> Asignar </a>
           </div>
         <?php } ?>
 
@@ -43,7 +43,7 @@
               <div>
                 <h4 class="card-title text-<?=$c?>"> <?=$obj['titulo']?>  <?=($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support pull-right"></i>' : '' ?> </h4> 
               </div>
-              <p class="card-text"> <?=$obj['titulo']?> </p>
+              <p class="card-text"> <?=$obj['descripcion']?> </p>
               <p class="card-text"> <strong>Responsable: </strong> <?=$obj['nombre']?> </p>
               <div class="row"> 
                 <span class="col-lg-2 col-sm-4"> <strong>Porcentaje de Avance: </strong> </span>
@@ -293,11 +293,12 @@
           </button>
         </div>
         <div class="modal-body">
-          <form method="post" action="<?=URL?>Objetivos/comentar" enctype="multipart/form-data">
+          <form method="post" action="<?=URL?>Objetivos/comentar" enctype="multipart/form-data" id="form_comentar">
             
             <div class="form-group">
               <label>Comentario</label>
-              <textarea class="form-control" name="comentario" rows="2"></textarea>
+              <textarea class="form-control" name="comentario" rows="2" id="comentario"></textarea>
+              <div class="invalid-feedback">Ingresa un valor válido</div>
             </div>
 
             <div class="form-group">
@@ -310,7 +311,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-          <button class="btn btn-primary" type="submit">Aceptar</button>
+          <button class="btn btn-primary" type="button" onclick="validarComentario()">Aceptar</button>
           </form>
         </div>
       </div>
@@ -329,12 +330,14 @@
             </button>
           </div>
           <div class="modal-body">
-            <form method="post" action="<?=URL?>Objetivos/avanzar">
+            <form method="post" action="<?=URL?>Objetivos/avanzar" id="form_avance">
               <div class="form-group">
                 <label>Porcentaje de Avance</label>
                 <div id="slider" class="mr-3">
                   <div id="porcentaje-handler" class="ui-slider-handle"></div>
                 </div>
+                <small class="form-text text-danger" id="error_slider" style="display: none">Ingresa un valor mayor al anterior</small>
+                <input type="hidden" id="avance_anterior" name="avance_anterior" value="<?=$obj['avance']?>">
                 <input type="hidden" id="avanzar-porcentaje" name="porcentaje_avance">
               </div>
 
@@ -346,67 +349,230 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-            <button class="btn btn-primary" type="submit">Aceptar</button>
+            <button class="btn btn-primary" type="button" onclick="validarAvance()">Aceptar</button>
             </form>
           </div>
         </div>
       </div>
     </div>
 
+
+
+
+    <!-- Modal ASIGNAR -->
+    <div class="modal fade" id="asignarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Asignar Objetivo</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="<?=URL?>tablero/asignar" onsubmit="$('#fecha_vencimientoA').removeAttr('disabled')" id="form_asignar">
+              <div class="form-group">
+                <label>Responsable(s)</label>
+                <select class="custom-select form-control" name="responsable[]" id="responsables" multiple>
+                  <!-- <option selected>Seleccionar...</option> -->
+                  <?php foreach ($mi_equipo as $usr) { ?>
+                    <option value="<?=$usr['id_usuario']?>"><?=$usr['nombre']?></option>
+                  <?php } ?>
+                </select>
+                <div class="invalid-feedback">Selecciona al menos un responsable</div>
+              </div>
+              <div class="form-group">
+                <label>Titulo</label>
+                <input type="text" class="form-control" id="tituloA" name="titulo" value="<?=$obj['titulo']?>">
+                <div class="invalid-feedback">Ingresa un título válido</div>
+              </div>
+              <div class="form-group">
+                <label>Descripcion</label>
+                <textarea class="form-control" name="descripcion" id="descripcionA" rows="2"><?=$obj['descripcion']?></textarea>
+                <div class="invalid-feedback">Ingresa una descripción válida</div>
+              </div>
+              <div class="form-group">
+                <label>Dias de duración</label>
+                <input type="number" class="form-control" min="1" id="dias_duracionA" step="1" name="dias" value="<?=$obj['dias']?>" onchange="getFechaVencimiento('A');">
+                <div class="invalid-feedback">Ingresa un valor válido</div>
+                <input type="hidden" id="dias_duracion_padre" value="<?=$obj['dias']?>">
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label>Fecha Inicio</label>
+                    <input type="date" value="<?=str_replace(' 00:00:00', '', $obj['fecha_asignacion'])?>" id="fecha_inicioA" name="fecha_inicio" class="form-control" onchange="getFechaVencimiento('A');">
+                    <div class="invalid-feedback">Ingresa una fecha válida</div>
+                    <input type="hidden" id="fecha_inicio_padre" value="<?=str_replace(' 00:00:00', '', $obj['fecha_asignacion'])?>">
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>Fecha Vencimiento</label>
+                    <input type="date" class="form-control" id="fecha_vencimientoA" name="fecha_vencimiento" value="<?=str_replace(' 00:00:00', '', $obj['fecha_vencimiento'])?>" disabled>
+                    <div class="invalid-feedback">Ingresa una fecha válida</div>
+                    <input type="hidden" id="fecha_vencimiento_padre" value="<?=str_replace(' 00:00:00', '', $obj['fecha_vencimiento'])?>">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Comentario de asignación (opcional)</label>
+                <textarea class="form-control" name="comentario_asignacion" rows="2"></textarea>
+              </div>
+              <input type="hidden" id="asignar-id_objetivo" value="<?=$obj['id_objetivo']?>" name="id_objetivo">
+              <input type="hidden" name="de_ver" value="<?=$obj['id_objetivo']?>">
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="button" onclick="validarAsignar()">Aceptar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
 <!-- FOR THE RANGE INPUT (AVANZAR) -->
 <script src="<?=URL?>Views/template/js/jquery-ui.min.js"></script>
+<!-- FOR THE VALIDAR FECHA -->
+<script src="<?=URL?>Views/template/js/moment.min.js"></script>
 
 <script>
-  $( function() {
-    var handle = $( "#porcentaje-handler" );
-    $( "#slider" ).slider({
-      animate: true,
-      range: "min",
-      create: function() {
-        handle.text( $( this ).slider( "value" ) );
-      },
-      slide: function( event, ui ) {
-        handle.text( ui.value );
-        $('#avanzar-porcentaje').val(ui.value);
-      }
+    $( function() {
+      var handle = $( "#porcentaje-handler" );
+      $( "#slider" ).slider({
+        animate: true,
+        range: "min",
+        create: function() {
+          handle.text( $( this ).slider( "value" ) );
+        },
+        slide: function( event, ui ) {
+          handle.text( ui.value );
+          $('#avanzar-porcentaje').val(ui.value);
+        }
+      });
+
+      $('#avanzar-porcentaje').val(<?=$obj['avance']?>);
+      $( "#slider" ).slider( "value", <?=$obj['avance']?> );
+      $( "#porcentaje-handler" ).text( <?=$obj['avance']?> );
+
     });
-
-    $('#avanzar-porcentaje').val(<?=$obj['$avance']?>);
-    $( "#slider" ).slider( "value", <?=$obj['$avance']?> );
-    $( "#porcentaje-handler" ).text( <?=$obj['$avance']?> );
-
-
-
-  function downloadLink(archivo) {
-        var ajaxOptions = {
-          url: '<?=URL?>Archivos/' + archivo
-        };
-          
-        var res = $.ajax(ajaxOptions);
-        
-        function onAjaxDone(data) {
-            location.href = '<?=URL?>Archivos/' + archivo;
-        }
-        
-        function onAjaxFail() {
-          alert('Bad ID');
-        }
-        
-        res
-          .done(onAjaxDone)
-            .fail(onAjaxFail)
-        ;
-  }
     
-  function onDownloadLinkClick(archivo) {
-      e.preventDefault();
-        downloadLink(archivo);
-  }
+
+    function getFechaVencimiento(t = ''){
+      var fi = '#fecha_inicio' + t;
+      var dd = '#dias_duracion' + t;
+      var fv = '#fecha_vencimiento' + t;
+      var fecha_inicio = new Date( $(fi).val() );
+      var dias = parseInt( $(dd).val() ) + fecha_inicio.getDate() + 1;
+      var fecha_vencimiento = new Date(fecha_inicio.getFullYear(), fecha_inicio.getMonth(), dias);
+      var mes = parseInt(fecha_vencimiento.getMonth()) + 1;
+      var messtr = (mes>9) ? mes : '0' + mes;
+      var diasstr = (parseInt(fecha_vencimiento.getDate())>9) ? fecha_vencimiento.getDate() : '0' + fecha_vencimiento.getDate();
+      var fecha = fecha_vencimiento.getFullYear() + '-' + messtr + '-' + diasstr;
+      $(fv).val(fecha);
+    }
+
+
+    function validarAvance(){
+      var validado = true;
+      // VALIDAR slider
+      if ( $('#avanzar-porcentaje').val() <= $('#avance_anterior').val()  ) {
+          $("#error_slider").css('display', 'inline');
+          validado = false;
+      }else{
+          $("#error_slider").css('display', 'none');
+      }
+      
+      // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
+      if (validado) {
+          $('#form_avance').submit();
+      }
+    }
+
+
+    function validarComentario(){
+      var validado = true;
+      // VALIDAR comentario
+      if ( $('#comentario').val() == '' || $('#comentario').val().length < 5) {
+          $('#comentario').addClass('is-invalid');
+          validado = false;
+      }else{
+         $('#comentario').removeClass('is-invalid');
+      }
+      
+      // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
+      if (validado) {
+          $('#form_comentar').submit();
+      }
+    }
+
+
+  function validarAsignar(){
+    var validado = true;
+    var elementos = new Array();
+    var selects = new Array();
+    elementos.push('#tituloA');
+    elementos.push('#descripcionA');
     
-  // $('#download-link').on('click', onDownloadLinkClick);
+    selects.push('#responsables');
 
+    // VALIDACION DE INPUT TEXT
+    for (var i = 0; i < elementos.length ; i++) {
+      if ( $(elementos[i]).val() == '' || $(elementos[i]).val().length < 5) {
+          $(elementos[i]).addClass('is-invalid');
+          validado = false;
+      }else{
+         $(elementos[i]).removeClass('is-invalid');
+      }
+    }
 
-});
+    // VALIDACION DE SELECT
+    for (var i = 0; i < selects.length ; i++) {
+      if ( $(selects[i]).val().length == 0) {
+          $(selects[i]).addClass('is-invalid');
+          validado = false;
+      }else{
+         $(selects[i]).removeClass('is-invalid');
+      }
+    }
 
+    // VALIDACION DIAS DE DURACION
+    if ( $('#dias_duracionA').val() < 1 || parseInt($('#dias_duracionA').val()) > parseInt($('#dias_duracion_padre').val()) ) {
+        $("#dias_duracionA").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#dias_duracionA").removeClass('is-invalid');
+    }
+
+    // VALIDACION DE FECHAININCIO
+    var fecha_inicio = moment(  $("#fecha_inicioA").val()  ); 
+    var fecha_inicio_padre = moment( $("#fecha_inicio_padre").val() ); 
+    if (fecha_inicio < fecha_inicio_padre || !fecha_inicio.isValid()) {
+        $("#fecha_inicioA").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#fecha_inicioA").removeClass('is-invalid');
+    }
+
+    // VALIDACION DE FECHAININCIO
+    var fecha_vencimiento = moment(  $("#fecha_vencimientoA").val()  ); 
+    var fecha_vencimiento_padre = moment( $("#fecha_vencimiento_padre").val() ); 
+    if (fecha_vencimiento > fecha_vencimiento_padre || !fecha_vencimiento.isValid() ) {
+        $("#fecha_vencimientoA").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#fecha_vencimientoA").removeClass('is-invalid');
+    }
+
+    // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
+    if (validado) {
+        $('#form_asignar').submit();
+    }
+
+  }
 
 </script>

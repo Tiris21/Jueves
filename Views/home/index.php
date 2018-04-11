@@ -177,4 +177,79 @@
       }],
     },
   });
-  </script>
+
+
+  function validarContrasena(){
+      var validado = true;
+      var pass1 = $('#pass1').val();
+      var pass2 = $('#pass2').val();
+      // VALIDAR pass1
+      if ( pass1 == '' || pass1.length < 2) {
+          $('#pass1 ').addClass('is-invalid');
+          validado = false;
+      }else{
+         $('#pass1').removeClass('is-invalid');
+      }
+      
+      // VALIDAR pass1
+      if ( pass2 != pass1 ) {
+          $('#pass2').addClass('is-invalid');
+          validado = false;
+      }else{
+         $('#pass2').removeClass('is-invalid');
+      }
+      
+      // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
+      if (validado) {
+          $('#form_contra').submit();
+      }
+  }
+
+
+    $(document).ready(function() {
+
+      if ("<?=$cambiaContra?>" == "undostres") {
+            $('#contraModal').modal("show"); 
+      }
+
+    });
+
+</script>
+
+
+
+
+  <!-- Modal SET CONTRASEÑA -->
+  <div class="modal fade" id="contraModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="<?=URL?>Home/cambiar_password" enctype="multipart/form-data" id="form_contra">
+            
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input type="password" class="form-control" id="pass1" name="pass1">
+              <div class="invalid-feedback">Ingresa un valor válido</div>
+            </div>         
+
+            <div class="form-group">
+              <label>Confirmar Contraseña</label>
+              <input type="password" class="form-control" id="pass2" name="pass2">
+              <div class="invalid-feedback">Las contraseñas no coinciden</div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" type="button" onclick="validarContrasena()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>

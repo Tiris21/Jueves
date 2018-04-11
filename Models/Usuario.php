@@ -83,7 +83,19 @@
 			$query = "UPDATE usuario SET last_login = NOW() WHERE id_usuario = ".$id;
 			$this->con->consultaSimple($query);
 		}
-		
+
+		// actualizza la contraseña
+		public function cambiarContra($pass){
+			$query = "UPDATE usuario SET pass = '". $pass ."'' WHERE id_usuario = ".$id;
+			$this->con->consultaSimple($query);
+		}
+
+		public function getContra(){
+			$query = 'SELECT * FROM usuario WHERE id_usuario = '.$_SESSION['id_usuario'];
+			$datos = $this->con->consultaRetorno($query);
+			$row = mysqli_fetch_assoc($datos);
+			return $row['pass'];
+		}		
 
 	}
  ?>

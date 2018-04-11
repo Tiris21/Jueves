@@ -22,6 +22,7 @@
 			
 			$asignados = $this->objetivo->listarSubobjetivos($id_obj);
 			$acciones = $this->accion->listarPorObjetivo($id_obj);
+			$mi_equipo = $this->usuario->listarMiEquipo($_SESSION['id_usuario']);
 
 			$nombre_usuario = '';
 			$nuevos_responsables = '';
@@ -34,8 +35,8 @@
 					$nuevos_responsables = $this->accion->usuariosResposablesAlAsignar($id_obj);
 				}
 			}
-	// var_dump( $asignados->num_rows  ); die;
-			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables];
+	// var_dump( $obj  ); die;
+			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables, 'mi_equipo' => $mi_equipo];
 		}
 
 		public function comentar(){

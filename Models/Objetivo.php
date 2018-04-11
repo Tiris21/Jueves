@@ -9,6 +9,7 @@
 		private $fecha_asignacion;
 		private $fecha_vencimiento;
 		private $avance;
+		private $prioridad;
 		private $estatus;
 		private $asignador;
 		private $responsable;
@@ -48,12 +49,17 @@
 		public function viewId($id){
 			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario WHERE id_objetivo = '.$id;
 			$datos = $this->con->consultaRetorno($query);
+			// if ($datos){
+			// 	$row = mysqli_fetch_assoc($datos);
+			// }else{
+			// 	$row = null;
+			// }
 			$row = mysqli_fetch_assoc($datos);
 			return $row;
 		}
 
 		public function add(){
-			$query = "INSERT INTO objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', tipo_avance = 'individual', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', avance = 0, estatus = 'activo', asignador = '{$this->asignador}', responsable = '{$this->responsable}', objetivo_padre = '{$this->objetivo_padre}';";
+			$query = "INSERT INTO objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', tipo_avance = 'individual', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', avance = 0, prioridad = '{$this->prioridad}', estatus = 'activo', asignador = '{$this->asignador}', responsable = '{$this->responsable}', objetivo_padre = '{$this->objetivo_padre}';";
 			return $this->con->consultaSimpleID($query);
 		}
 
@@ -78,6 +84,8 @@
 		public function asignar($id, $responsables, $comentario){
 			foreach ($responsables as $responsable) {
 				$this->set('responsable', $responsable);
+				$this->set('prioridad', 'baja');
+
 				$id_nuevo = $this->add();
 				//ACCION
 				$this->accion->addApropiar($id_nuevo, $responsable, $id);

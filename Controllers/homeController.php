@@ -1,13 +1,16 @@
 <?php namespace Controllers;
 	
 	use Models\Dashboard as Dashboard;
+	use Models\Usuario as Usuario;
 
 	class homeController{
 
 		private $dashboard;
+		private $user;
 
 		public function __construct(){
 			$this->dashboard = new Dashboard();
+			$this->user = new Usuario();
 		}
 
 		public function index(){
@@ -23,7 +26,23 @@
 
 			$next_expire = $this->dashboard->getProximosAVencer($_SESSION['id_usuario']);
 
-			return ['vista' => 'index', 'citas' => $citas, 'avances' => $avances, 'comentarios' => $comentarios, 'asignaciones' => $asignaciones, 'grafica' => $grafica, 'next_dates' => $next_dates, 'next_expire' => $next_expire];
+			$cambiaContra = $this->user->getContra();
+			if ($cambiaContra == '123') {
+				$cambiaContra = 'undostres';
+			}else{
+				$cambiaContra = '';
+			}
+	// var_dump($cambiaContra); die;
+
+			return ['vista' => 'index', 'citas' => $citas, 'avances' => $avances, 'comentarios' => $comentarios, 'asignaciones' => $asignaciones, 'grafica' => $grafica, 'next_dates' => $next_dates, 'next_expire' => $next_expire, 'cambiaContra' => $cambiaContra];
+		}
+
+		public function cambiar_password(){
+			if ($_POST) {
+				$this->user->cambiarContra($_POST['pass1']);
+			}
+
+			header("Location: " . URL . "Home");
 		}
 	} 
 
