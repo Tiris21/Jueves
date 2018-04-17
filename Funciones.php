@@ -51,7 +51,7 @@
 			    $mail->Host = 'smtp.1and1.mx';  					// Specify main and backup SMTP servers
 			    $mail->SMTPAuth = true;                            	// Enable SMTP authentication
 			    $mail->Username = 'vhaproject@vitrohogar.com.mx';  	// SMTP username
-			    $mail->Password = 'vhprjct0123';					// SMTP password
+			    $mail->Password = 'vhprjct0';					// SMTP password
 			    $mail->SMTPSecure = 'tls';        					// Enable TLS encryption, `ssl` also accepted
 			    $mail->Port = 25;                    				// TCP port to connect to
 
