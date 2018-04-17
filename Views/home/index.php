@@ -132,7 +132,7 @@
                       <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
                       <div class="media-body">
                         <strong><?=$exp['titulo']?></strong>
-                        <div class="text-muted smaller"> <strong>Fecha de vencimiento: </strong> <?=formatearFecha($date['fecha']);?></div>
+                        <div class="text-muted smaller"> <strong>Fecha de vencimiento: </strong> <?=formatearFecha($exp['fecha_vencimiento']);?></div>
                       </div>
                     </div>
                   </a>

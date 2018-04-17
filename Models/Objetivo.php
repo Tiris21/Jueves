@@ -67,6 +67,8 @@
 			$id_obj = $this->add();
 			//ACCION
 			$this->accion->addCreacion($id_obj);
+
+			return $id_obj;
 		}
 
 		public function avanzar($id, $porcentaje, $comentario){
@@ -84,11 +86,12 @@
 		public function asignar($id, $responsables, $comentario){
 			foreach ($responsables as $responsable) {
 				$this->set('responsable', $responsable);
-				$this->set('prioridad', 'baja');
-
 				$id_nuevo = $this->add();
-				//ACCION
+				
+				// ACCION
 				$this->accion->addApropiar($id_nuevo, $responsable, $id);
+
+				$id_nuevos[] = $id_nuevo;
 			}
 
 			$query = 'UPDATE objetivo SET tipo_avance = "asignado", avance = '.$this->getPorcentajeAvance($id).'  WHERE id_objetivo = '.$id;
@@ -97,6 +100,8 @@
 			$this->accion->addAsignar($id, $comentario);
 			// AL ASIGNAR SE ACTUALIZAN LOS PORCENTAJES DE AVANCE DE LOS PADRES
 			$this->setAvancePadres($id);
+
+			return $id_nuevos;
 		}
 
 		public function setAvancePadres($id_hijo){
@@ -110,8 +115,15 @@
 				
 					//ACCION esto se agrego sobre la marcha
 					$obj = $this->viewId($id_objetivopadre); 
-					$this->accion->addAvanzar($id_objetivopadre, "Avance ocacionado por un objetivo de un nivel abajo (".$id_objetivopadre.")", $obj['avance'], $porcentaje);
+					$this->accion->addAvanzar($id_objetivopadre, "Avance automatico por un objetivo de un nivel abajo (".$id_hijo.")", $obj['avance'], $porcentaje);
 					// hasta aqui juer juer
+
+					// ESTO DEL ENVIO DE CORREOS TAMBIEN SOBRE LA MARCHA SE AGREGO
+					if ($porcentaje >= 100) {
+						$correo = new Correo();
+						$correo->sendComplete($id_objetivopadre);
+					}
+					// JUAR JUAR
 				
 				$id_objetivopadre = $this->getObjetivoPadre($id_objetivopadre);
 			}

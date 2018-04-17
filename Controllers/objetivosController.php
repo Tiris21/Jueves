@@ -83,11 +83,12 @@
 		}
 
 
-
 		public function descargar($archivo){
 			header("Content-disposition: attachment; filename=Archivos/".$archivo);
 			readfile("Archivos/".$archivo);
 		}
+
+
 	} 
 
 

@@ -15,10 +15,10 @@
 
 		public function index(){
 			
-			$citas = $this->dashboard->getCitasNuevas($_SESSION['id_usuario']);
-			$avances = $this->dashboard->getAvancesNuevos($_SESSION['id_usuario']);
-			$comentarios = $this->dashboard->getComentariosNuevos($_SESSION['id_usuario']);
-			$asignaciones = $this->dashboard->getAsignacionesNuevas($_SESSION['id_usuario']);
+			$citas = $this->dashboard->getCitasNuevas($_SESSION['id_usuario'], $_SESSION['last_login']);
+			$avances = $this->dashboard->getAvancesNuevos($_SESSION['id_usuario'], $_SESSION['last_login']);
+			$comentarios = $this->dashboard->getComentariosNuevos($_SESSION['id_usuario'], $_SESSION['last_login']);
+			$asignaciones = $this->dashboard->getAsignacionesNuevas($_SESSION['id_usuario'], $_SESSION['last_login']);
 
 			$grafica = $this->dashboard->getDatosGrafica($_SESSION['id_usuario']);
 			
@@ -39,6 +39,7 @@
 
 		public function cambiar_password(){
 			if ($_POST) {
+				// var_dump($_POST); die;
 				$this->user->cambiarContra($_POST['pass1']);
 			}
 

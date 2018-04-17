@@ -137,11 +137,12 @@
 
 				}else{
 					// solo es una cita a guardar
-					agregarCita($_POST['fecha_inicio'] . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'], $_POST['objetivo']);
+					$this->agregarCita($_POST['fecha_inicio'] . ' ' . $_POST['hora'], $_POST['asunto'], $_POST['responsables'], $_POST['objetivo']);
 				}
 			}
 
-			header("Location: " . URL . "Agenda");
+			header("Location: " . URL . "Agend
+				a");
 		}
 
 
@@ -149,6 +150,7 @@
 		$this->cita->set('fecha', $f);
 		$this->cita->set('titulo', $t);
 		$this->cita->set('usuarios', $u);
+		$this->cita->set('tipo', 'junta');
 		$this->cita->set('id_objetivo', $o);
 		$this->cita->add();
 	} 

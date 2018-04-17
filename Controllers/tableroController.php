@@ -3,17 +3,23 @@
 	use Models\Objetivo as Objetivo;
 	use Models\Usuario as Usuario;
 	use Models\Accion as Accion;
+	use Models\Correo as Correo;
+	use Models\Cita as Cita;
 
 	class tableroController{
 
 		private $objetivo;
 		private $usuario;
 		private $accion;
+		private $mailer;
+		private $cita;
 
 		public function __construct(){
 			$this->objetivo = new Objetivo();
 			$this->usuario = new Usuario();
 			$this->accion = new Accion();
+			$this->mailer = new Correo();
+			$this->cita = new Cita();
 		}
 
 		public function index(){
@@ -40,7 +46,16 @@
 				$this->objetivo->set('prioridad', $_POST['prioridad']);
 				$this->objetivo->set('objetivo_padre', 0);
 				
-				$this->objetivo->crear();
+				$id_obj = $this->objetivo->crear();
+
+				// CREAR CITA DE VENCIMIENTO
+				$this->cita->set('fecha', $_POST['fecha_vencimiento']);
+				$this->cita->set('titulo', $_POST['titulo']);
+				$this->cita->set('usuarios', null);
+				$this->cita->set('tipo', 'vencimiento');
+				$this->cita->set('id_objetivo', $id_obj);
+				
+				$this->cita->add();
 			}	
 
 			header("Location: " . URL . "Tablero");
@@ -49,6 +64,11 @@
 		public function avanzar(){
 			if ($_POST) {
 				$this->objetivo->avanzar($_POST['id_objetivo'], $_POST['porcentaje_avance'], $_POST['comentario_avance']);
+
+				// ENVIO DE CORREOS
+				if ($_POST['porcentaje_avance'] >= '100') {
+					$this->mailer->sendComplete($_POST['id_objetivo']);
+				}
 			}
 
 			header("Location: " . URL . "Tablero");
@@ -96,8 +116,17 @@
 				$this->objetivo->set('fecha_vencimiento', $_POST['fecha_vencimiento']);
 				$this->objetivo->set('asignador', $_SESSION['id_usuario']);
 				$this->objetivo->set('objetivo_padre', $_POST['id_objetivo']);
+				$o = $this->objetivo->viewID($_POST['id_objetivo']);
+				$this->objetivo->set('prioridad', $o['prioridad']);
 
-				$this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable'], $_POST['comentario_asignacion']);
+				$ids = $this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable'], $_POST['comentario_asignacion']);
+
+				// AGREGAR CITAS DE VENCIMIENTO
+				$this->cita->addVencimientoAsignados($_POST['titulo'], $_POST['fecha_vencimiento'], $ids, $_POST['responsable']);
+
+				// ENVIO DE CORREOS
+				$this->mailer->sendAsignados($ids);
+
 				if (isset($_POST['de_ver'])) {
 					header("Location: " . URL . "Objetivos/ver/" . $_POST['de_ver']);
 				}
@@ -143,6 +172,8 @@
 
 			return ['vista' => 'equipo', 'objetivos' => $objetivos];
 		}
+
+
 	} 
 
 

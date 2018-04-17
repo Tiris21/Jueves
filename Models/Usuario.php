@@ -60,7 +60,7 @@
 		}
 
 		public function permisoJerarquico($usr_gfe, $usuario_objetivo){
-			# AH PERRO UN RECURSIVO
+			# AH PERRO UN RECURSIVO :v
 			$el_equipo_de = $this->listarMiEquipo($usr_gfe);
 			
 			foreach ($el_equipo_de as $sub) {
@@ -86,7 +86,7 @@
 
 		// actualizza la contraseña
 		public function cambiarContra($pass){
-			$query = "UPDATE usuario SET pass = '". $pass ."'' WHERE id_usuario = ".$id;
+			$query = "UPDATE usuario SET pass = '". $pass ."' WHERE id_usuario = ".$_SESSION['id_usuario'];
 			$this->con->consultaSimple($query);
 		}
 

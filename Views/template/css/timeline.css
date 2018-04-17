@@ -126,9 +126,9 @@
     left: 40px;
   }
   ul.timeline > li > .timeline-panel {
-    width: calc(10%);
+    width: calc(75%);
     width: -moz-calc(10%);
-    width: -webkit-calc(10%);
+    /*width: -webkit-calc(10%);*/
   }
   ul.timeline > li > .timeline-badge {
     top: 16px;

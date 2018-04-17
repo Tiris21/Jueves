@@ -22,12 +22,14 @@
           <div class="col-4 text-right">
             <a class="btn btn-outline-secondary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#comentarModal"> 
               <i class="fa fa-fw fa-comment"></i> Comentar </a>
-            <?php if ($obj['tipo_avance'] != 'asignado'){ ?>
+          <?php if ($obj['tipo_avance'] != 'asignado'){ ?>
             <a class="btn btn-outline-primary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
               <i class="fa fa-fw fa-arrow-up"></i> Avanzar </a>
-            <?php }?>
-            <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#asignarModal"> 
+          <?php }?>
+          <?php if ($_SESSION['permiso'] > 0){ ?>
+            <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#asignarModal">
               <i class="fa fa-fw fa-support"></i> Asignar </a>
+          <?php } ?>
           </div>
         <?php } ?>
 
@@ -80,7 +82,7 @@
                           <div>
                             <h4 class="card-title text-<?=$c?>"> <?=$asig['titulo']?>  <?=($asig['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support pull-right"></i>' : '' ?> </h4> 
                           </div>
-                          <p class="card-text"> <?=$asig['titulo']?> </p>
+                          <p class="card-text"> <?=$asig['descripcion']?> </p>
                           <p class="card-text"> <strong>Responsable: </strong> <?=$asig['nombre']?> </p>
                           <div class="row"> 
                             <span class="col-lg-2 col-sm-4"> <strong> Avance: </strong> </span>
@@ -480,7 +482,7 @@
     function validarAvance(){
       var validado = true;
       // VALIDAR slider
-      if ( $('#avanzar-porcentaje').val() <= $('#avance_anterior').val()  ) {
+      if ( parseInt($('#avanzar-porcentaje').val()) <= parseInt($('#avance_anterior').val())  ) {
           $("#error_slider").css('display', 'inline');
           validado = false;
       }else{

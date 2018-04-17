@@ -6,7 +6,7 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="<?=URL?>">Home</a>
+          <a href="<?=URL?>">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Tablero</li>
       </ol>
@@ -15,10 +15,12 @@
         <div class="col-9">
           <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero de Control</h1>  <!-- (< ?=$_SESSION['nombre']?>) -->
         </div>
+      <?php if ($_SESSION['permiso'] > 0) {?>
         <div class="col-3 text-right">
           <a class="btn btn-outline-info" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#nuevoModal"> 
             <i class="fa fa-fw fa-plus"></i> Nuevo </a>
         </div>
+      <?php } ?>
       </div>
 
       <div class="row">
@@ -132,7 +134,7 @@
               },
               success: function(result){
                 $('#tituloA').val(result.titulo);
-                $('#descripcionA').val(result.descripcion);
+                $('#descripcionA').text(result.descripcion);
                 $('#dias_duracionA').val(result.dias);
                 $('#dias_duracion_padre').val(result.dias);
                 var fa = result.fecha_asignacion.split(' ');
@@ -505,7 +507,7 @@
 
   function validarAvance(){
     var validado = true;
-    if ( $('#avanzar-porcentaje').val() <= $('#avance_anterior').val()  ) {
+    if ( parseInt($('#avanzar-porcentaje').val()) <= parseInt($('#avance_anterior').val())  ) {
         $("#error_slider").css('display', 'inline');
         validado = false;
     }else{

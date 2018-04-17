@@ -50,7 +50,6 @@
 
 <script>
   $(function() {
-    
     $('#calendar').fullCalendar({
       
       header: {
@@ -60,21 +59,27 @@
       },
       locale      :     'es',
       themeSystem :     'bootstrap4',
+      timeFormat  :     'h:mm',
+      eventLimit  :     true,
 
       events: [
-        <?php foreach ($mis_citas as $cita) { ?>
+        <?php foreach ($mis_citas as $cita) { 
+          $link = (is_null($cita['id_objetivo']) || $cita['id_objetivo'] == '' ) ? '' : 'url : "'.URL.'Objetivos/ver/'.$cita['id_objetivo'].'",';
+          $color = ($cita['tipo'] != 'vencimiento' ) ? '' : 'color : "#dc3545",';
+        ?>
       
           {
             id     : <?=$cita['id_cita']?>,
             title  : '<?=$cita['titulo']?>',
             start  : '<?= str_replace(" ", "T", $cita['fecha']) ?>',
-            url    : '<?=URL?>tablero',
+            <?=$link?>
+            <?=$color?>
             allDay : false, 
+
           },
 
         <?php } ?>
       ],
-
       //eventColor: '#378006'
 
     });

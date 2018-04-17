@@ -8,55 +8,51 @@
 			$this->con = new Conexion();
 		}
 
-		public function getCitasNuevas($id_usr){
+		public function getCitasNuevas($id_usr, $last_login){
 			$query = '	SELECT COUNT(*) AS total
 						FROM cita c
 						JOIN cita_usuario cu ON c.id_cita = cu.id_cita
-						JOIN usuario u ON u.id_usuario = cu.id_usuario
 						WHERE c.tipo = "junta"
 						AND c.estatus = "activo"
-						AND c.fecha > u.last_login
+						AND c.fecha > "'.$last_login.'"
 						AND cu.id_usuario = "'.$id_usr.'"';
 			$datos = $this->con->consultaRetorno($query);
 			$row = mysqli_fetch_assoc($datos);
 			return $row['total'];
 		}
 
-		public function getAvancesNuevos($id_usr){
+		public function getAvancesNuevos($id_usr, $last_login){
 			$query = '	SELECT COUNT(*) AS total
 						FROM accion a
 						JOIN objetivo o ON o.id_objetivo = a.id_objetivo
-						JOIN usuario u ON u.id_usuario = o.responsable
 						WHERE a.clase = "avanzar"
 						AND o.estatus = "activo"
-						AND a.fecha_creacion > u.last_login
-						AND u.id_usuario = "'.$id_usr.'"';
+						AND a.fecha_creacion > "'.$last_login.'"
+						AND o.responsable = "'.$id_usr.'"';
 			$datos = $this->con->consultaRetorno($query);
 			$row = mysqli_fetch_assoc($datos);
 			return $row['total'];
 		}
 
-		public function getComentariosNuevos($id_usr){
+		public function getComentariosNuevos($id_usr, $last_login){
 			$query = '	SELECT COUNT(*) AS total
 						FROM accion a
 						JOIN objetivo o ON o.id_objetivo = a.id_objetivo
-						JOIN usuario u ON u.id_usuario = o.responsable
 						WHERE a.clase = "comentar"
 						AND o.estatus = "activo"
-						AND a.fecha_creacion > u.last_login
-						AND u.id_usuario = "'.$id_usr.'"';
+						AND a.fecha_creacion > "'.$last_login.'"
+						AND o.responsable = "'.$id_usr.'"';
 			$datos = $this->con->consultaRetorno($query);
 			$row = mysqli_fetch_assoc($datos);
 			return $row['total'];
 		}
 
-		public function getAsignacionesNuevas($id_usr){
+		public function getAsignacionesNuevas($id_usr, $last_login){
 			$query = '	SELECT COUNT(*) AS total
 						FROM accion a
-						JOIN usuario u ON u.id_usuario = a.id_usuario
 						WHERE a.clase = "apropiar"
-						AND a.fecha_creacion > u.last_login
-						AND u.id_usuario = "'.$id_usr.'"';
+						AND a.fecha_creacion > "'.$last_login.'"
+						AND a.id_usuario = "'.$id_usr.'"';
 			$datos = $this->con->consultaRetorno($query);
 			$row = mysqli_fetch_assoc($datos);
 			return $row['total'];

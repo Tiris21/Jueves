@@ -4,9 +4,10 @@
 		private $id;
 		private $fecha;
 		private $titulo;
-		private $estatus;
 		private $usuarios;
+		private $tipo;
 		private $id_objetivo;
+		private $estatus;
 
 		private $con;
 
@@ -29,15 +30,29 @@
 
 
 		public function add(){
-			$query = "INSERT INTO cita SET fecha = '{$this->fecha}', titulo = '{$this->titulo}', id_objetivo = '{$this->id_objetivo}', estatus = 'activo';";
+			$query = "INSERT INTO cita SET fecha = '{$this->fecha}', titulo = '{$this->titulo}', tipo = '{$this->tipo}', id_objetivo = '{$this->id_objetivo}', estatus = 'activo';";
 			$id_cita = $this->con->consultaSimpleID($query);
 
 			$query = "INSERT INTO cita_usuario SET id_cita = '{$id_cita}', id_usuario = " . $_SESSION['id_usuario'];
 			$this->con->consultaSimple($query);
 
-			foreach ($this->usuarios as $us) {
-				$query = "INSERT INTO cita_usuario SET id_cita = '{$id_cita}', id_usuario = " . $us;
-				$this->con->consultaSimple($query);
+			if ( is_array($this->usuarios) ) {
+				foreach ($this->usuarios as $us) {
+					$query = "INSERT INTO cita_usuario SET id_cita = '{$id_cita}', id_usuario = " . $us;
+					$this->con->consultaSimple($query);
+				}
+			}
+		}
+
+		public function addVencimientoAsignados($titulo, $fecha, $objetivos, $responsables){
+			$this->titulo = $titulo;
+			$this->fecha = $fecha;
+			$this->tipo = 'vencimiento';
+			for ($i=0; $i < count($objetivos); $i++) {
+				$this->id_objetivo = $objetivos[$i];
+				$this->usuarios = [ $responsables[$i] ];
+				$this->add();
+
 			}
 		}
 
