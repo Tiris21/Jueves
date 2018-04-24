@@ -288,6 +288,10 @@ body.sidenav-toggled #mainNav.static-top #sidenavToggler i {
   .content-wrapper {
     margin-left: 250px;
   }
+  
+  body.sidenav-toggled .navbar-sidenav .nav-link-text {
+    display: none;
+  }
 }
 
 #sidenavToggler i {
@@ -306,10 +310,6 @@ body.sidenav-toggled #mainNav.static-top #sidenavToggler i {
 
 body.sidenav-toggled .navbar-sidenav {
   width: 55px;
-}
-
-body.sidenav-toggled .navbar-sidenav .nav-link-text {
-  display: none;
 }
 
 body.sidenav-toggled .navbar-sidenav .nav-item,

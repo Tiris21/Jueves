@@ -26,4 +26,5 @@ $(document).ready(function() {
   });
 
   $("#sidenavToggler").trigger("click"); // oculta automaticamente el sidebar
+
 });
