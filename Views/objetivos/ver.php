@@ -7,7 +7,10 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="Home">Dashboard</a>
+          <a href="<?=URL?>Home">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="<?=URL?>Tablero">Tablero</a>
         </li>
         <li class="breadcrumb-item active">Ver Objetivo</li>
       </ol>
@@ -18,10 +21,15 @@
           <!-- <p>This is an example of a blank page that you can use as a starting point for creating new ones.</p> -->
         </div>
 
-        <?php if ($obj['responsable'] == $_SESSION['id_usuario']){ // SEGURIDAD MAXIMA PAPU?>
-          <div class="col-4 text-right">
+        <div class="col-4 text-right">
+        <?php if ($obj['responsable'] == $_SESSION['id_usuario'] || $puede_ver == 'eaaaa'){ // SEGURIDAD MAXIMA PAPU ?>
+        <!-- ES EL RESPONSABLE + USUARIOS DE NIVEL ARRIBA DEL RESPOSNSABLE -->
             <a class="btn btn-outline-secondary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#comentarModal"> 
               <i class="fa fa-fw fa-comment"></i> Comentar </a>
+        <?php } ?>
+
+
+        <?php if ($obj['responsable'] == $_SESSION['id_usuario']){ // SEGURIDAD MAXIMA PAPU ?>
           <?php if ($obj['tipo_avance'] != 'asignado'){ ?>
             <a class="btn btn-outline-primary" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#avanzarModal"> 
               <i class="fa fa-fw fa-arrow-up"></i> Avanzar </a>
@@ -30,8 +38,8 @@
             <a class="btn btn-outline-danger" data-toggle="modal" role="button" aria-pressed="true" href="#" data-target="#asignarModal">
               <i class="fa fa-fw fa-support"></i> Asignar </a>
           <?php } ?>
-          </div>
         <?php } ?>
+        </div>
 
       </div>
 
@@ -46,7 +54,11 @@
                 <h4 class="card-title text-<?=$c?>"> <?=$obj['titulo']?>  <?=($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support pull-right"></i>' : '' ?> </h4> 
               </div>
               <p class="card-text"> <?=$obj['descripcion']?> </p>
+            <?php if ($objetivo_padre) { ?>
+                <p class="card-text"> <strong>Objetivo Padre: </strong> <?= $objetivo_padre['titulo']?> </p>
+            <?php } ?>
               <p class="card-text"> <strong>Responsable: </strong> <?=$obj['nombre']?> </p>
+              <p class="card-text"> <strong>Prioridad: </strong> <?=ucwords($obj['prioridad'])?> </p>
               <div class="row"> 
                 <span class="col-lg-2 col-sm-4"> <strong>Porcentaje de Avance: </strong> </span>
                 <div class="progress col-lg-10 col-sm-8 pl-0 mt-1">  <?=($obj['avance'] == '0') ? '0%' : ''?>
@@ -65,7 +77,7 @@
 
 <?php if($asignados->num_rows > 0) { ?>
       <div class="row">
-         <div class="col-12">
+         <div class="col-lg-12">
 
             <div class="card mb-3">
               <div class="card-header">
@@ -74,9 +86,9 @@
               <div class="card-body">
                 <div class="row">
                   
-                  <?php foreach ($asignados as $asig) { $c = getColorPorPorcentaje($asig['avance'])?>
+                  <?php foreach ($asignados as $asig) { $c = getColorPorPorcentaje($asig['avance'], $asig['dias'], $asig['fecha_vencimiento']);?>
                   
-                    <div class="col-6">
+                    <div class="col-lg-6">
                       <div class="card carta border-<?=$c?>">
                         <div class="card-block card-body ">
                           <div>
@@ -435,6 +447,29 @@
 
 
 
+    <!-- Modal ADVERTENCIA -->
+    <div class="modal fade" id="advertenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ADVERTENCIA!</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body" id="ver-body">
+            <p> <strong> Lo siento, no tienes permiso para ver el contenido de esta página :( </strong> </p>
+            <p> <strong> Se te redericcionará a la pagina de tú equipo </strong> </p>
+            <p class="text-center text-danger" style="font-size: 12em;"> <i class="fa fa-ban" aria-hidden="true"></i> </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
 
 <!-- FOR THE RANGE INPUT (AVANZAR) -->
@@ -443,6 +478,18 @@
 <script src="<?=URL?>Views/template/js/moment.min.js"></script>
 
 <script>
+
+    $(document).ready(function() {
+      if ("<?=$puede_ver?>" == "nel" && "<?=$_SESSION['id_usuario']?>" != "<?=$obj['responsable']?>") {
+        $('#advertenciaModal').on('hidden.bs.modal', function (e) {
+            window.location.href = "<?=URL?>Tablero";
+        })
+        $('#advertenciaModal').modal("show"); 
+      }
+    });
+
+
+
     $( function() {
       var handle = $( "#porcentaje-handler" );
       $( "#slider" ).slider({

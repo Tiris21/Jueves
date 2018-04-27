@@ -18,8 +18,9 @@
 
 		public function ver($id_obj){
 			$obj = $this->objetivo->viewId($id_obj);
-			$c = getColorPorPorcentaje($obj['avance']);
-			
+
+			$c = getColorPorPorcentaje($obj['avance'], $obj['dias'],  $obj['fecha_vencimiento'] );
+
 			$asignados = $this->objetivo->listarSubobjetivos($id_obj);
 			$acciones = $this->accion->listarPorObjetivo($id_obj);
 			$mi_equipo = $this->usuario->listarMiEquipo($_SESSION['id_usuario']);
@@ -35,8 +36,15 @@
 					$nuevos_responsables = $this->accion->usuariosResposablesAlAsignar($id_obj);
 				}
 			}
-	// var_dump( $obj  ); die;
-			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables, 'mi_equipo' => $mi_equipo];
+
+			$objetivo_padre = $this->objetivo->viewId($obj['objetivo_padre']);
+// var_dump($objetivo_padre); die;
+			// la variable puede_ver indica si el equipo que se quiere ver no esta en un nivel mas alto del usuario loggeado
+			$puede_ver = $this->usuario->permisoJerarquico($_SESSION['id_usuario'], $obj['responsable']);
+			if ( is_null($puede_ver)) 
+				$puede_ver = 'nel';
+
+			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables, 'mi_equipo' => $mi_equipo, 'puede_ver' => $puede_ver, 'objetivo_padre' => $objetivo_padre];
 		}
 
 		public function comentar(){

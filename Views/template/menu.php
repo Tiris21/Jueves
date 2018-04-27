@@ -99,49 +99,93 @@
       <ul class="navbar-nav ml-auto">
         
         <!-- NOTIFICACIONES -->
-        <!-- <li class="nav-item dropdown ">
+        <?php 
+          use Models\Dashboard as Dashboard; 
+          $dashboard = new Dashboard();
+
+          $notificaciones = $dashboard->getNotificaciones($_SESSION['id_usuario'], $_SESSION['last_login']);
+          $hay_not = ($notificaciones && $notificaciones->num_rows > 0 ? $notificaciones->num_rows : false);
+        ?>
+        <li class="nav-item dropdown ">
           <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-fw fa-bell"></i>
+            <?php if ($hay_not) { ?>
             <span class="d-lg-none">Notificaciones
-              <span class="badge badge-pill badge-warning">6 Nuevas</span>
+              <span class="badge badge-pill badge-warning">Nuevas</span>
             </span>
-            <span class="indicator text-warning d-none d-lg-block">
-              <i class="fa fa-fw fa-circle"></i>
-            </span>
+              <span class="indicator text-warning d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+              </span>
+            <?php } ?>
           </a>
-          <div class="dropdown-menu" aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">New Alerts:</h6>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
-              <span class="text-success">
-                <strong>
-                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-              </span>
-              <span class="small float-right text-muted">11:21 AM</span>
-              <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
-              <span class="text-danger">
-                <strong>
-                  <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
-              </span>
-              <span class="small float-right text-muted">11:21 AM</span>
-              <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
-              <span class="text-success">
-                <strong>
-                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-              </span>
-              <span class="small float-right text-muted">11:21 AM</span>
-              <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item small" href="#">View all alerts</a>
+
+          <div class="dropdown-menu" id="innerScroll" aria-labelledby="alertsDropdown" style="right: 0; left: auto; 
+          <?= ($hay_not >= 6) ? 'overflow-y: scroll; height: 400px;': ''; ?>"> <!-- cambiar para hacerlo con kquery -->
+            <h6 class="dropdown-header"><?= ($hay_not ? '' : 'Sin ') ?>Notificaciones</h6>
+          
+          <?php 
+            foreach ($notificaciones as $not) { 
+              switch ($not['clase']) {
+                case 'avanzar':
+          ?>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?=URL?>Objetivos/ver/<?=$not['id_objetivo']?>">
+                      <span class="text-primary">
+                        <strong><i class="fa fa-long-arrow-up fa-fw"></i>Avance</strong>
+                      </span>
+                      <span class="small float-right text-muted"><?=formatearFechaHora($not['fecha_creacion'])?></span>
+                      <div class="dropdown-message small">En objetivo: "<?=$not['titulo']?>"</div>
+                    </a>
+                  
+          <?php         
+                break;
+                case 'apropiar':
+                  // if ($not['id_usuario'] == $_SESSION['id_usuario']) {
+                
+          ?>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?=URL?>Objetivos/ver/<?=$not['id_objetivo']?>">
+                      <span class="text-warning">
+                        <strong><i class="fa fa-magic fa-fw"></i>Apropiación</strong>
+                      </span>
+                      <span class="small float-right text-muted"><?=formatearFechaHora($not['fecha_creacion'])?></span>
+                      <div class="dropdown-message small">Se te asignó un objetivo: "<?=$not['titulo']?>"</div>
+                    </a>          
+          <?php         
+                  // }
+                break;
+                case 'comentar':
+          ?>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?=URL?>Objetivos/ver/<?=$not['id_objetivo']?>">
+                      <span class="text-secondary">
+                        <strong><i class="fa fa-comment fa-fw"></i>Comentario</strong>
+                      </span>
+                      <span class="small float-right text-muted"><?=formatearFechaHora($not['fecha_creacion'])?></span>
+                      <div class="dropdown-message small">En el objetivo: "<?=$not['titulo']?>"</div>
+                    </a>             
+          <?php         
+                break;
+                case 'asignar':
+          ?>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?=URL?>Objetivos/ver/<?=$not['id_objetivo']?>">
+                      <span class="text-danger">
+                        <strong><i class="fa fa-support fa-fw"></i>Asignación</strong>
+                      </span>
+                      <span class="small float-right text-muted"><?=formatearFechaHora($not['fecha_creacion'])?></span>
+                      <div class="dropdown-message small">Asignaste el objetivo: "<?=$not['titulo']?>"</div>
+                    </a>
+          <?php 
+                break;
+              } // switch
+            } // foreach
+          ?>
+
           </div>
-        </li> -->
+        </li>
+
+
 
         <!-- BARRA DE BUSQUEDA -->
         <!-- <li class="nav-item">
@@ -165,3 +209,22 @@
       </ul>
     </div>
   </nav>
+
+
+<script>
+
+  var step = 100;
+  $('#innerScroll').bind('mousewheel', function(e) {
+      if(e.originalEvent.wheelDelta / 120 > 0) {
+          $("#innerScroll").animate({
+            scrollTop: "-=" + step + "px"
+           });
+      } else {
+          $("#innerScroll").animate({
+            scrollTop: "+=" + step + "px"
+          });
+      }
+  });
+
+
+</script>

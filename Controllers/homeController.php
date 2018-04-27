@@ -26,20 +26,19 @@
 
 			$next_expire = $this->dashboard->getProximosAVencer($_SESSION['id_usuario']);
 
+		
 			$cambiaContra = $this->user->getContra();
 			if ($cambiaContra == '123') {
 				$cambiaContra = 'undostres';
 			}else{
 				$cambiaContra = '';
 			}
-	// var_dump($cambiaContra); die;
 
 			return ['vista' => 'index', 'citas' => $citas, 'avances' => $avances, 'comentarios' => $comentarios, 'asignaciones' => $asignaciones, 'grafica' => $grafica, 'next_dates' => $next_dates, 'next_expire' => $next_expire, 'cambiaContra' => $cambiaContra];
 		}
 
 		public function cambiar_password(){
 			if ($_POST) {
-				// var_dump($_POST); die;
 				$this->user->cambiarContra($_POST['pass1']);
 			}
 

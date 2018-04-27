@@ -22,15 +22,38 @@
 		return round(($fecha1 - $hoy) / 86400);
 	}
 
-	function getColorPorPorcentaje($porcentaje){
-		if ($porcentaje < 30) {
-			$color = 'danger';
-		}else if ($porcentaje < 70) {
-			$color = 'warning';
-		}else {
-			$color = 'success';
-		}
+	function difDias($fecha1, $fecha2){
+		$fecha_1 = strtotime($fecha1);
+		$fecha_2 = strtotime($fecha2);
+		return round(($fecha_2 - $fecha_1) / 86400);
+	}
 
+	function getColorPorPorcentaje($avance, $dias, $fecha_ven){
+		$dpv = difDiasAHoy($fecha_ven);
+		$porcentaje_avance_tiempo = (($dias-$dpv) * 100) / $dias;
+
+		if ($porcentaje_avance_tiempo <= 15) { // de 0 a 15 -> Iniciando el objetivo
+			$color = 'success';			
+		
+		} else if( $porcentaje_avance_tiempo >= 90){ // > 90 -> Venciendo el objetivo
+			if ($avance < 95) {
+				$color = 'danger';
+			}else if($avance < 100){
+				$color = 'warning';
+			}else{
+				$color = 'success';
+			}
+
+		}else{
+			if ($avance >= $porcentaje_avance_tiempo) { // del 15.1 al 90 -> porcentaje de avance
+				$color = 'success';
+			}else if ($avance >= ($porcentaje_avance_tiempo - 10) ) {
+				$color = 'warning';
+			}else {
+				$color = 'danger';
+			}
+		}
+// var_dump($porcentaje_avance_tiempo); die;
 		return $color;
 	}
 

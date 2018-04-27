@@ -43,7 +43,7 @@
 
               <?php setlocale(LC_TIME,"es_MX");
                 foreach ($mis_objetivos as $obj) {
-                  $c = getColorPorPorcentaje($obj['avance']);
+                  $c = getColorPorPorcentaje($obj['avance'], $obj['dias'],  $obj['fecha_vencimiento']);
               ?>
                 <tr>
                   <td> <?= $obj['titulo'] ?> </td>
@@ -51,8 +51,8 @@
                   <td><?= formatearFecha($obj['fecha_vencimiento']) ?></td>
                   <td><?= (difDiasAHoy($obj['fecha_vencimiento']) < 0) ? 0 : difDiasAHoy($obj['fecha_vencimiento']) ?> </td>
                   <td class="text-white bg-<?=$c?>"><?= $obj['avance'] ?>% </td>
-                  <td><?= $obj['prioridad'] ?> </td>
-                  <td> <h4 class="text-danger"> <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support"></i>' : '' ?></h4> </td>
+                  <td><?= ucwords($obj['prioridad']) ?> </td>
+                  <td> <h4> <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
                   <td>
                     <select class="custom-select acciones">
                       <option value="seleccionar" selected>Seleccionar..</option>

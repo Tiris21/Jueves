@@ -3,7 +3,7 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="#">Home</a>
+          <a href="<?=URL?>Home">Home</a>
         </li>
         <li class="breadcrumb-item">
           <a href="<?=URL?>Equipo">Mi Equipo</a>
