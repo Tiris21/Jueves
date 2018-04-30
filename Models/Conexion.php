@@ -3,10 +3,10 @@
 	class Conexion{
 
 		private $datos = array(
-			'host' => 'localhost',
-			'user' => 'root',
-			'pass' => '',
-			'bd' => 'vitrobj_bd'
+			'host' => (AMBIENTE == 'dev' ? 'localhost' : 'localhost'),
+			'user' => (AMBIENTE == 'dev' ? 'root' : 'vitro'),
+			'pass' => (AMBIENTE == 'dev' ? '' : 'Vitro2018!'),
+			'bd' => (AMBIENTE == 'dev' ? 'vitrobj_bd' : 'vhaproject_db'),
 		);
 
 		private $con;

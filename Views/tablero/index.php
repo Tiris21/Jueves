@@ -59,11 +59,15 @@
                       <option value="ver-<?=$obj['id_objetivo']?>">Ver Detalle</option>
                       <?php if ($obj['tipo_avance'] != 'asignado') {?>
                         <option value="avanzar-<?=$obj['id_objetivo']?>-<?=$obj['avance']?>">Avanzar</option>
-                      <?php } ?>
-                      <?php if ($_SESSION['permiso'] > 0) {?>
+
+                      <?php } if ($_SESSION['permiso'] > 0) {?>
                       <option value="asignar-<?=$obj['id_objetivo']?>">Asignar</option>
                       <?php } ?>
                       <option value="comentar-<?=$obj['id_objetivo']?>">Comentar</option>
+                      <?php if ( $_SESSION['id_usuario'] == $obj['asignador'] ) { ?>
+                        <option value="editar-<?=$obj['id_objetivo']?>">Editar</option>
+                        <option value="eliminar-<?=$obj['id_objetivo']?>">Eliminar</option>
+                      <?php } ?>
                     </select>
                   </td>
                 </tr>  
@@ -148,6 +152,29 @@
             $('#asignarModal').modal("show"); 
 
 
+        }else if(opval == "editar") {
+            $('#editar-id_objetivo').val(opcion[1]);
+            $.ajax({ 
+              type: "post",
+              url:  '<?=URL?>tablero/ajaxObjetivo', 
+              dataType: 'json',
+              data: {
+                    id_obj: opcion[1],
+              },
+              success: function(result){
+                $('#tituloE').val(result.titulo);
+                $('#descripcionE').text(result.descripcion);
+                $('#dias_duracionE').val(result.dias);
+                var fa = result.fecha_asignacion.split(' ');
+                $('#fecha_inicioE').val(fa[0]);
+                fa = result.fecha_vencimiento.split(' ');
+                $('#fecha_vencimientoE').val(fa[0]);
+                $('#editar-prioridad').val(result.prioridad);
+              }
+            });
+            $('#editarModal').modal("show"); 
+
+
         }else if(opval == "avanzar") {
             $('#avanzar-id_objetivo').val(opcion[1]);
             $('#avanzar-porcentaje').val(opcion[2]);
@@ -160,6 +187,11 @@
         }else if(opval == "comentar") {
             $('#comentar-id_objetivo').val(opcion[1]);
             $('#comentarModal').modal("show"); 
+        
+        
+        }else if(opval == "eliminar") {
+            $('#eliminar-id_objetivo').val(opcion[1]);
+            $('#eliminarModal').modal("show"); 
         }
 
         $(this).val("seleccionar");
@@ -232,6 +264,70 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
             <button class="btn btn-primary" type="button" onclick="validarAsignar()">Aceptar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal EDITAR -->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar Objetivo</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="<?=URL?>tablero/editar" onsubmit="$('#fecha_vencimientoE').removeAttr('disabled')" id="form_editar">
+              <div class="form-group">
+                <label>Titulo</label>
+                <input type="text" class="form-control" id="tituloE" name="titulo">
+                <div class="invalid-feedback">Ingresa un título válido</div>
+              </div>
+              <div class="form-group">
+                <label>Descripcion</label>
+                <textarea class="form-control" name="descripcion" id="descripcionE" rows="2"></textarea>
+                <div class="invalid-feedback">Ingresa una descripción válida</div>
+              </div>
+              <div class="form-group">
+                <label>Dias de duración</label>
+                <input type="number" class="form-control" min="1" id="dias_duracionE" step="1" name="dias" onchange="getFechaVencimiento('E');">
+                <div class="invalid-feedback">Ingresa un valor válido</div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label>Fecha Inicio</label>
+                    <input type="date" value="<?=date("Y-m-d")?>" id="fecha_inicioE" name="fecha_inicio" class="form-control" onchange="getFechaVencimiento('E');">
+                    <div class="invalid-feedback">Ingresa una fecha válida</div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>Fecha Vencimiento</label>
+                    <input type="date" class="form-control" id="fecha_vencimientoE" name="fecha_vencimiento" disabled>
+                    <div class="invalid-feedback">Ingresa una fecha válida</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Prioridad</label>
+                <select class="custom-select form-control" name="prioridad" id="editar-prioridad">
+                  <option value="baja">Baja</option>
+                  <option value="media">Media</option>
+                  <option value="alta">Alta</option>
+                </select>
+                <div class="invalid-feedback">Ingresa un valor válido</div>
+              </div>
+              <input type="hidden" id="editar-id_objetivo" name="id_objetivo">
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="button" onclick="validarEditar()">Aceptar</button>
             </form>
           </div>
         </div>
@@ -338,6 +434,30 @@
       </div>
     </div>
 
+
+    <!-- Eliminar Modal-->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirmar acción</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <form method="post" action="<?=URL?>tablero/eliminar">
+          <div class="modal-body">
+            ¿Estas seguro de eliminar el objetivo?
+            <input type="hidden" id="eliminar-id_objetivo" name="id_objetivo">
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="submit" >Aceptar</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
 
 
     <!-- Nuevo Modal-->
@@ -586,32 +706,14 @@
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function validar(){
+  function validarEditar(){
+    var validado = true;
     var elementos = new Array();
     var selects = new Array();
-    var validado = true;
-
-    elementos.push('#titulo');
-    selects.push('#responsable');
-    // selects.push('#objetivo'); no es obligatorio
+    elementos.push('#tituloE');
+    elementos.push('#descripcionE');
+    
+    selects.push('#editar-prioridad');
 
     // VALIDACION DE INPUT TEXT
     for (var i = 0; i < elementos.length ; i++) {
@@ -633,67 +735,37 @@
       }
     }
 
+    // VALIDACION DIAS DE DURACION
+    if ( $('#dias_duracionE').val() < 1 ) {
+        $("#dias_duracionE").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#dias_duracionE").removeClass('is-invalid');
+    }
+
     // VALIDACION DE FECHAININCIO
-    var fecha_inicio = moment(  $("#fecha_inicio").val()  ); 
-    var now = moment(); 
-
-    if (fecha_inicio < now) {
-        $("#fecha_inicio").addClass('is-invalid');
+    var fecha_inicio = moment(  $("#fecha_inicioE").val()  ); 
+    if (!fecha_inicio.isValid()) {
+        $("#fecha_inicioE").addClass('is-invalid');
         validado = false;
     }else{
-        $("#fecha_inicio").removeClass('is-invalid');
+        $("#fecha_inicioE").removeClass('is-invalid');
     }
 
-    // VALIDACION HORA
-    var hora1 = '08:00';
-    var hora2 = '22:00';
-    if ( $('#hora').val() < hora1 || $('#hora').val() > hora2 ) {
-        $("#hora").addClass('is-invalid');
+    // VALIDACION DE FECHAININCIO
+    var fecha_vencimiento = moment(  $("#fecha_vencimientoE").val()  ); 
+    if (!fecha_vencimiento.isValid()) {
+        $("#fecha_vencimientoE").addClass('is-invalid');
         validado = false;
-    }else { 
-        $("#hora").removeClass('is-invalid');
-    }
-
-    // VALIDACION DIA MES
-    if ( $('#radio-mensual-numero').prop('checked') ) { 
-      if ( $('#dia_mensual').val() < 1 || $('#dia_mensual').val() > 31 ) {
-          $("#dia_mensual").addClass('is-invalid');
-          validado = false;
-      }else{
-          $("#dia_mensual").removeClass('is-invalid');
-      }
-    }
-
-    // VALIDACION CANT DE REPETICIONES
-    if ( $('#radio-fin-for').prop('checked') ) {
-      if ( $('#repeticiones').val() < 1 || $('#repeticiones').val() > 25 ) {
-          $("#repeticiones").addClass('is-invalid');
-          validado = false;
-      }else{
-          $("#repeticiones").removeClass('is-invalid');
-      }
     }else{
-          $("#repeticiones").removeClass('is-invalid');
-    }
-
-    // VALIDACION FECHA FINALIZACION
-    if ( $('#radio-fin-while').prop('checked') && $('#check-periodicidad').prop('checked') ) {
-      var fecha_termino = moment(  $("#fecha_fin").val()  );
-      if ( fecha_termino < fecha_inicio ) {
-          $("#fecha_fin").addClass('is-invalid');
-          validado = false;
-      }else{
-          $("#fecha_fin").removeClass('is-invalid');
-      }
-    }else{
-          $("#fecha_fin").removeClass('is-invalid');
+        $("#fecha_vencimientoE").removeClass('is-invalid');
     }
 
     // SI TODO ESTA BIEN SUMBITEAT EL FORMULARIO
     if (validado) {
-        $('form').submit();
+        $('#form_editar').submit();
     }
-  
+
   }
 
 </script>

@@ -74,6 +74,39 @@
 			header("Location: " . URL . "Tablero");
 		}
 
+		public function eliminar(){
+			if ($_POST) {
+				$this->objetivo->eliminar($_POST['id_objetivo']);
+			}
+
+			if (isset($_POST['de_equipo'])) {	
+				header("Location: " . URL . "Tablero/Equipo");
+			}else{
+				header("Location: " . URL . "Tablero");
+			}
+
+		}
+
+		public function editar(){
+			if ($_POST) {
+				$this->objetivo->set('titulo', $_POST['titulo']);
+				$this->objetivo->set('descripcion', $_POST['descripcion']);
+				$this->objetivo->set('dias', $_POST['dias']);
+				$this->objetivo->set('fecha_asignacion', $_POST['fecha_inicio']);
+				$this->objetivo->set('fecha_vencimiento', $_POST['fecha_vencimiento']);
+				$this->objetivo->set('prioridad', $_POST['prioridad']);
+
+				$this->objetivo->editar($_POST['id_objetivo']);
+			}
+
+			if (isset($_POST['de_equipo'])) {	
+				header("Location: " . URL . "Tablero/Equipo");
+			}else{
+				header("Location: " . URL . "Tablero");
+			}
+
+		}
+
 		public function comentar(){
 			if ($_POST) {
 				$file_name = '';
@@ -135,19 +168,6 @@
 			header("Location: " . URL . "Tablero");
 		}
 
-		public function ajaxDetalleObjetivo(){
-			if ($_POST) {
-				$obj = $this->objetivo->viewID($_POST['id_obj']);
-				echo "<h3>".$obj['titulo']."</h3>
-		              <p>".$obj['descripcion']."</p>
-		              <p>Responsable: ".$obj['nombre']."</p>
-		              <p>Fechas: del ".formatearFecha($obj['fecha_asignacion'])." al ".formatearFecha($obj['fecha_vencimiento'])."</p>
-		              <p>Porcentaje de avance: ".$obj['avance']."%</p>";
-			}else{
-				echo 'json_encode(["responseText"=>"<form action="wfwdf/editwdfar/" method="POST">"])';
-			}
-		}
-
 		public function ajaxObjetivo(){
 			if ($_POST) {
 				$obj = $this->objetivo->viewID($_POST['id_obj']);
@@ -155,6 +175,7 @@
 									"descripcion" => $obj['descripcion'], 
 									"fecha_asignacion" => $obj['fecha_asignacion'], 
 									"fecha_vencimiento" => $obj['fecha_vencimiento'], 
+									"prioridad" => $obj['prioridad'], 
 									"dias" => $obj['dias'] 
 								]);
 			}else{

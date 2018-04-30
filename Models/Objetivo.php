@@ -36,6 +36,11 @@
 			return $this->con->consultaRetorno($query);
 		}
 
+		public function listarObjetivosHijos($id_ob){
+			$query = 'SELECT * FROM objetivo WHERE objetivo_padre = ' . $id_ob . ' AND estatus = "activo"';
+			return $this->con->consultaRetorno($query);
+		}
+
 		public function listarSubobjetivos($id_op){
 			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario WHERE objetivo_padre = ' . $id_op . ' AND o.estatus = "activo" AND u.estatus = "activo"';
 			return $this->con->consultaRetorno($query);
@@ -141,8 +146,54 @@
 			return $obj['objetivo_padre'];
 		}
 
+		public function editar($id_ob){
+			$query = "UPDATE objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', prioridad = '{$this->prioridad}' WHERE id_objetivo = ".$id_ob;
+			$this->con->consultaSimple($query);
+		}
+
+		private function darBaja($id_ob){
+			$query = 'UPDATE objetivo SET estatus = "baja"  WHERE id_objetivo = '.$id_ob;
+			$this->con->consultaSimple($query);
+		}
+
+		public function eliminar($id_obj){
+			$this->darBaja($id_obj);
+			
+			$objetivos_hijos = $this->listarObjetivosHijos($id_obj);
+			
+			foreach ($objetivos_hijos as $oh) {
+				$hoh = $this->listarObjetivosHijos($oh['id_objetivo']);
+
+				if ($hoh->num_rows > 0) {
+					return $this->eliminar($oh['id_objetivo']);
+				}else{
+					$this->darBaja($oh['id_objetivo']);
+				}
+
+			}
+
+		}
 
 
+
+		public function permisoJerarquico($usr_gfe, $usuario_objetivo){
+			# AH PERRO UN RECURSIVO :v
+			$el_equipo_de = $this->listarMiEquipo($usr_gfe);
+			
+			foreach ($el_equipo_de as $sub) {
+				if ($sub['id_usuario'] == $usuario_objetivo) {
+					return 'eaaaa';
+				}else {
+					// si la funcion regresa null, no retorna nada para que pase al siguiente paso del foreach
+					$aux = $this->permisoJerarquico($sub['id_usuario'], $usuario_objetivo);
+					if ( ! is_null($aux) ) {
+						return $aux;
+					}
+				}
+				
+			}
+
+		}
 
 
 	}

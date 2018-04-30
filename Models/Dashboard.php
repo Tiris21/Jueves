@@ -14,6 +14,7 @@
 					JOIN objetivo o ON o.id_objetivo = a.id_objetivo 
 					WHERE a.fecha_creacion >= "'.$last_login.'" 
 					AND a.clase <> "apropiar"
+					AND o.estatus <> "baja"
 					AND (o.responsable = '.$id_usr.' 
 					OR o.id_objetivo IN ( SELECT h.id_objetivo FROM objetivo h WHERE h.objetivo_padre IN ( SELECT p.id_objetivo FROM objetivo p WHERE p.responsable = '.$id_usr.' ) ) )
 					UNION
@@ -22,6 +23,7 @@
 					JOIN objetivo o ON o.id_objetivo = a.id_objetivo 
 					WHERE a.fecha_creacion >= "'.$last_login.'" 
 					AND a.clase = "apropiar"
+					AND o.estatus <> "baja"
 					AND a.id_usuario = '.$id_usr.')	w
 					ORDER BY fecha_creacion DESC';
 			$datos = $this->con->consultaRetorno($query);

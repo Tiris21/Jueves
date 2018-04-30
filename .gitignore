@@ -1,2 +1,5 @@
 # Ignorar el contenido de las carpetas log y cache
 Archivos/
+
+# ARCHIVO DE CONFIGURACION DE AMBIENTES
+ambiente.php

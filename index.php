@@ -1,14 +1,16 @@
 <?php 
+	require_once "Config/Autoload.php";
+	require_once "Funciones.php";
+	require_once "ambiente.php";
 
 	define('DS', DIRECTORY_SEPARATOR);
 	define('ROOT', realpath(dirname(__FILE__)) . DS);
-	define('URL', 'http://localhost/VitrObjetivos/');
-
-	require_once "Config/Autoload.php";
-	require_once "Funciones.php";
 	
-	// setlocale(LC_TIME,"es_MX");
-	// header("Content-Type: text/html;charset=utf-8");
+	if (AMBIENTE == 'dev') {
+		define('URL', 'http://localhost/VitrObjetivos/');
+	}else if (AMBIENTE == 'prod') {
+		define('URL', 'http://www.vhaproject.com/p/');
+	}
 
 	date_default_timezone_set('America/Mexico_City');
 	setlocale(LC_ALL,"es_ES");
