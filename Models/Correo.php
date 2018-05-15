@@ -84,7 +84,7 @@
 			$destinatario['correo'] = 'angel.alvarez@vitrohogar.com.mx';
 			$destinatario['nombre'] = 'Angel Alvarez';
 			// $copiados['Salvador Cornejo'] = 'salvador.cornejo@vitrohogar.com.mx';
-			$copiados['Pancho'] = 'panchin.lopez@vitro.com';
+			// $copiados['Pancho'] = 'panchin.lopez@vitro.com';
 			// var_dump($copiados); die;
 			
 			// enviarCorreo($destinatario, $copiados, 'vencido', 36, 'titulo de un objetivo');

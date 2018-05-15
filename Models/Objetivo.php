@@ -174,8 +174,6 @@
 
 		}
 
-
-
 		public function permisoJerarquico($usr_gfe, $usuario_objetivo){
 			# AH PERRO UN RECURSIVO :v
 			$el_equipo_de = $this->listarMiEquipo($usr_gfe);
@@ -193,6 +191,21 @@
 				
 			}
 
+		}
+
+		public function obtenerResponsables($id_obj){
+			$query = 'SELECT DISTINCT u.nombre FROM objetivo o JOIN usuario u ON u.id_usuario = o.responsable WHERE objetivo_padre = '.$id_obj;
+			$responsables = $this->con->consultaRetorno($query);
+			$str_respon = '';
+			$cont = 1;
+			foreach ($responsables as $r) {
+				$str_respon .= $r['nombre'];
+				if ($cont != $responsables->num_rows) {
+					$str_respon .= ', ';
+				}
+				$cont++;
+			}
+			return $str_respon;
 		}
 
 

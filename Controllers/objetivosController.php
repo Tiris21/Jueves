@@ -35,16 +35,23 @@
 				if ($accion['clase'] == 'asignar') {
 					$nuevos_responsables = $this->accion->usuariosResposablesAlAsignar($id_obj);
 				}
+				if ($accion['clase'] == 'comentar') {
+					$usuario = $this->usuario->viewId($accion['id_usuario']);
+					$comentadores[] = $usuario['nombre'];
+				}
 			}
 
+			if ( !isset($comentadores) )
+				$comentadores = '';
+// var_dump($comentadores); die;
 			$objetivo_padre = $this->objetivo->viewId($obj['objetivo_padre']);
-// var_dump($objetivo_padre); die;
+			
 			// la variable puede_ver indica si el equipo que se quiere ver no esta en un nivel mas alto del usuario loggeado
 			$puede_ver = $this->usuario->permisoJerarquico($_SESSION['id_usuario'], $obj['responsable']);
 			if ( is_null($puede_ver)) 
 				$puede_ver = 'nel';
 
-			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables, 'mi_equipo' => $mi_equipo, 'puede_ver' => $puede_ver, 'objetivo_padre' => $objetivo_padre];
+			return ['vista' => 'ver', 'obj' => $obj, 'c' => $c, 'asignados' => $asignados, 'acciones' => $acciones, 'nombre_usuario' => $nombre_usuario, 'responsables' => $nuevos_responsables, 'mi_equipo' => $mi_equipo, 'puede_ver' => $puede_ver, 'objetivo_padre' => $objetivo_padre, 'comentadores' => $comentadores];
 		}
 
 		public function comentar(){

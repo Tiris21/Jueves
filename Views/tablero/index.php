@@ -1,5 +1,7 @@
 <!-- ESTILO PARA UTILIZAR EL RANGEN PARA AVANZAR -->
 <link rel="stylesheet" href="<?=URL?>Views/template/css/jquery-ui.min.css">
+<!-- ESTILO PARA UTILIZAR EL SELECT 2 -->
+<link rel="stylesheet" href="<?=URL?>Views/template/css/select2.min.css">
 
 <div class="content-wrapper">
     <div class="container-fluid">
@@ -13,7 +15,7 @@
       <!-- Icon Cards-->
       <div class="row">
         <div class="col-9">
-          <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero de Control</h1>  <!-- (< ?=$_SESSION['nombre']?>) -->
+          <h1> <i class="fa fa-fw fa-table"></i> Mi Tablero</h1>  <!-- (< ?=$_SESSION['nombre']?>) -->
         </div>
       <?php if ($_SESSION['permiso'] > 0) {?>
         <div class="col-3 text-right">
@@ -52,7 +54,7 @@
                   <td><?= (difDiasAHoy($obj['fecha_vencimiento']) < 0) ? 0 : difDiasAHoy($obj['fecha_vencimiento']) ?> </td>
                   <td class="text-white bg-<?=$c?>"><?= $obj['avance'] ?>% </td>
                   <td><?= ucwords($obj['prioridad']) ?> </td>
-                  <td> <h4> <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
+                  <td> <h4 <?= ($obj['tipo_avance'] == 'asignado') ? 'data-toggle="tooltip" title="'.array_shift($los_asignados).'"' : '' ?> > <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
                   <td>
                     <select class="custom-select acciones">
                       <option value="seleccionar" selected>Seleccionar..</option>
@@ -64,7 +66,7 @@
                       <option value="asignar-<?=$obj['id_objetivo']?>">Asignar</option>
                       <?php } ?>
                       <option value="comentar-<?=$obj['id_objetivo']?>">Comentar</option>
-                      <?php if ( $_SESSION['id_usuario'] == $obj['asignador'] ) { ?>
+                      <?php if ( $_SESSION['id_usuario'] == $obj['asignador'] ) { //&& $_SESSION['permiso'] > 3 ?>
                         <option value="editar-<?=$obj['id_objetivo']?>">Editar</option>
                         <option value="eliminar-<?=$obj['id_objetivo']?>">Eliminar</option>
                       <?php } ?>
@@ -213,7 +215,7 @@
             <form method="post" action="<?=URL?>tablero/asignar" onsubmit="$('#fecha_vencimientoA').removeAttr('disabled')" id="form_asignar">
               <div class="form-group">
                 <label>Responsable(s)</label>
-                <select class="custom-select form-control" name="responsable[]" id="responsables" multiple>
+                <select class="custom-select form-control select2" name="responsable[]" id="responsables" multiple>
                   <!-- <option selected>Seleccionar...</option> -->
                   <?php foreach ($mi_equipo as $usr) { ?>
                     <option value="<?=$usr['id_usuario']?>"><?=$usr['nombre']?></option>
@@ -535,6 +537,9 @@
 <script src="<?=URL?>Views/template/js/jquery-ui.min.js"></script>
 <!-- FOR THE CALENDAR -->
 <script src="<?=URL?>Views/template/js/moment.min.js"></script>
+<!-- FOR THE SELECT 2 -->
+<script src="<?=URL?>Views/template/js/select2.full.min.js"></script>
+
 
 <script>
   $( function() {
@@ -550,6 +555,8 @@
         $('#avanzar-porcentaje').val(ui.value);
       }
     });
+
+    $('.select2').select2({width: '100%'});
   } );
 
   function getFechaVencimiento(t = ''){

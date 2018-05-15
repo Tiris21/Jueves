@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>VitrObjetivos - Inicia Sesion</title>
+  <title>VHA Project - Inicia Sesion</title>
   <!-- Bootstrap core CSS-->
   <link href="<?=URL?>Views/template/SB_Admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->

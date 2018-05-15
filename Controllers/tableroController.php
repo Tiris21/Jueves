@@ -26,12 +26,19 @@
 			if (isset($_SESSION['login'])) { # el if solo es para que no marque error en el login porque es la pantalla principal (HOME)
 				$mis_objetivos = $this->objetivo->listarMisObjetivos($_SESSION['id_usuario']);
 				$mi_equipo = $this->usuario->listarMiEquipo($_SESSION['id_usuario']);
+
+				foreach ($mis_objetivos as $obj) {
+					if ($obj['tipo_avance'] == 'asignado') {
+						$los_asignados[] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
+					}
+				}
+
 			}else{
 				$mis_objetivos = '';
 				$mi_equipo = '';
+				$los_asignados = '';
 			}
-
-			return ['mis_objetivos' => $mis_objetivos, 'mi_equipo' => $mi_equipo, 'vista' => 'index'];
+			return ['mis_objetivos' => $mis_objetivos, 'mi_equipo' => $mi_equipo, 'vista' => 'index', 'los_asignados' => $los_asignados];
 		}
 
 		public function crear(){
@@ -184,14 +191,17 @@
 		}
 
 		public function equipo(){
-			// if (isset($_SESSION['login'])) { # el if solo es para que no marque error en el login porque es la pantalla principal (HOME)
-				$objetivos = $this->objetivo->listarObjetivosDeEquipo($_SESSION['id_usuario']);
-			// }else{
-			// 	$mis_objetivos = '';
-			// 	$mi_equipo = '';
-			// }
+			$objetivos = $this->objetivo->listarObjetivosDeEquipo($_SESSION['id_usuario']);
+			foreach ($objetivos as $obj) {
+				if ($obj['tipo_avance'] == 'asignado') {
+					$los_asignados[] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
+				}
+			}
 
-			return ['vista' => 'equipo', 'objetivos' => $objetivos];
+			if ( !isset($los_asignados) )
+				$los_asignados = '';
+
+			return ['vista' => 'equipo', 'objetivos' => $objetivos, 'los_asignados' => $los_asignados];
 		}
 
 

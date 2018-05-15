@@ -58,12 +58,20 @@
 			$usr = $this->usuario->viewId($id_usr);
 			$objetivos_usuario = $this->objetivo->listarMisObjetivos($id_usr);
 
+			foreach ($objetivos_usuario as $obj) {
+				if ($obj['tipo_avance'] == 'asignado') {
+					$los_asignados[] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
+				}
+			}
+			if ( !isset($los_asignados) )
+				$los_asignados = '';
+
 			// la variable puede_ver indica si el usuario loggeado tienen permiso de ver el tablero solicitado 
 			$puede_ver = $this->usuario->permisoJerarquico($_SESSION['id_usuario'], $id_usr);
 			if ( is_null($puede_ver)) 
 				$puede_ver = 'carefully';
 
-			return ['vista' => 'ver_tablero', 'objetivos_usuario' => $objetivos_usuario, 'usr' => $usr, 'puede_ver' => $puede_ver];
+			return ['vista' => 'ver_tablero', 'objetivos_usuario' => $objetivos_usuario, 'usr' => $usr, 'puede_ver' => $puede_ver, 'los_asignados' => $los_asignados];
 		}
 
 

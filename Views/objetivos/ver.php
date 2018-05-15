@@ -1,5 +1,7 @@
 <!-- ESTILO PARA UTILIZAR EL RANGEN PARA AVANZAR -->
 <link rel="stylesheet" href="<?=URL?>Views/template/css/jquery-ui.min.css">
+<!-- ESTILO PARA UTILIZAR EL SELECT 2 -->
+<link rel="stylesheet" href="<?=URL?>Views/template/css/select2.min.css">
 
   <div class="content-wrapper">
     <div class="container-fluid">
@@ -226,7 +228,7 @@
                                   </div>
                                   <div class="timeline-panel">
                                       <div class="timeline-heading">
-                                          <h4 class="timeline-title">Comentario</h4>
+                                          <h4 class="timeline-title">Comentario de: <?= array_shift($comentadores) ?></h4>
                                           <p><small class="text-muted"><i class="fa fa-clock-o"></i> <?= formatearFechaHora($a['fecha_creacion']) ?> </small></p>
                                       </div>
                                       <div class="timeline-body">
@@ -387,7 +389,7 @@
             <form method="post" action="<?=URL?>tablero/asignar" onsubmit="$('#fecha_vencimientoA').removeAttr('disabled')" id="form_asignar">
               <div class="form-group">
                 <label>Responsable(s)</label>
-                <select class="custom-select form-control" name="responsable[]" id="responsables" multiple>
+                <select class="custom-select form-control select2" name="responsable[]" id="responsables" multiple>
                   <!-- <option selected>Seleccionar...</option> -->
                   <?php foreach ($mi_equipo as $usr) { ?>
                     <option value="<?=$usr['id_usuario']?>"><?=$usr['nombre']?></option>
@@ -476,6 +478,8 @@
 <script src="<?=URL?>Views/template/js/jquery-ui.min.js"></script>
 <!-- FOR THE VALIDAR FECHA -->
 <script src="<?=URL?>Views/template/js/moment.min.js"></script>
+<!-- FOR THE SELECT 2 -->
+<script src="<?=URL?>Views/template/js/select2.full.min.js"></script>
 
 <script>
 
@@ -486,6 +490,8 @@
         })
         $('#advertenciaModal').modal("show"); 
       }
+
+      $('.select2').select2({width: '100%'});
     });
 
 
