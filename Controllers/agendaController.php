@@ -141,8 +141,7 @@
 				}
 			}
 
-			header("Location: " . URL . "Agend
-				a");
+			header("Location: " . URL . "Agenda");
 		}
 
 

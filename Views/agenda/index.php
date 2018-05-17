@@ -1,5 +1,7 @@
 <!-- ESTILO PARA UTILIZAR LA LIBRERIA FULLCALENDAR -->
 <link rel="stylesheet" href="<?=URL?>Views/template/css/fullcalendar.min.css">
+<!-- ESTILO PARA UTILIZAR EL SELECT 2 -->
+<link rel="stylesheet" href="<?=URL?>Views/template/css/select2.min.css">
 
 <div class="content-wrapper">
     <div class="container-fluid">
@@ -114,7 +116,7 @@
 
               <div class="form-group">
                 <label>Asistentes</label>
-                <select class="custom-select form-control" name="responsables[]" id="responsable" multiple>
+                <select class="custom-select form-control select2" name="responsables[]" id="responsable" multiple>
                   <!-- <option selected>Seleccionar...</option> -->
                   <?php foreach ($mi_equipo as $usr) { ?>
                     <option value="<?=$usr['id_usuario']?>"><?=$usr['nombre']?></option>
@@ -315,8 +317,14 @@
     </div>
   </div>
 
+<!-- FOR THE SELECT 2 -->
+<script src="<?=URL?>Views/template/js/select2.full.min.js"></script>
 
 <script>
+  $(document).ready(function($) {
+    $('.select2').select2({width: '100%'});
+  });
+
   function togglePerioricidad(estado){
       $('#con-repeticion').toggle();
   }
