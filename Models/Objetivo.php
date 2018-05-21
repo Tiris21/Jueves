@@ -14,6 +14,7 @@
 		private $asignador;
 		private $responsable;
 		private $objetivo_padre;
+		private $id_departamento;
 		
 		private $con;
 		private $accion;
@@ -32,7 +33,7 @@
 		}
 
 		public function listarMisObjetivos($id_usuario){
-			$query = 'SELECT * FROM objetivo WHERE responsable = ' . $id_usuario . ' AND estatus = "activo"';
+			$query = 'SELECT *, d.nombre as departamento FROM objetivo o LEFT JOIN departamento d ON d.id_departamento = o.id_departamento WHERE o.responsable = ' . $id_usuario . ' AND o.estatus = "activo"';
 			return $this->con->consultaRetorno($query);
 		}
 
@@ -64,7 +65,7 @@
 		}
 
 		public function add(){
-			$query = "INSERT INTO objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', tipo_avance = 'individual', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', avance = 0, prioridad = '{$this->prioridad}', estatus = 'activo', asignador = '{$this->asignador}', responsable = '{$this->responsable}', objetivo_padre = '{$this->objetivo_padre}';";
+			$query = "INSERT INTO objetivo SET titulo = '$this->titulo', descripcion = '{$this->descripcion}', tipo_avance = 'individual', dias = '{$this->dias}', fecha_asignacion = '{$this->fecha_asignacion}', fecha_vencimiento = '{$this->fecha_vencimiento}', avance = 0, prioridad = '{$this->prioridad}', estatus = 'activo', asignador = '{$this->asignador}', responsable = '{$this->responsable}', id_departamento = '{$this->id_departamento}', objetivo_padre = '{$this->objetivo_padre}';";
 			return $this->con->consultaSimpleID($query);
 		}
 

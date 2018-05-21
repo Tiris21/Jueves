@@ -5,6 +5,7 @@
 	use Models\Accion as Accion;
 	use Models\Correo as Correo;
 	use Models\Cita as Cita;
+	use Models\Departamento as Departamento;
 
 	class tableroController{
 
@@ -13,6 +14,7 @@
 		private $accion;
 		private $mailer;
 		private $cita;
+		private $departamento;
 
 		public function __construct(){
 			$this->objetivo = new Objetivo();
@@ -20,12 +22,14 @@
 			$this->accion = new Accion();
 			$this->mailer = new Correo();
 			$this->cita = new Cita();
+			$this->departamento = new Departamento();
 		}
 
 		public function index(){
 			if (isset($_SESSION['login'])) { # el if solo es para que no marque error en el login porque es la pantalla principal (HOME)
 				$mis_objetivos = $this->objetivo->listarMisObjetivos($_SESSION['id_usuario']);
 				$mi_equipo = $this->usuario->listarMiEquipo($_SESSION['id_usuario']);
+				$mis_departamentos = $this->departamento->listarMisDepartamentos($_SESSION['id_usuario']);
 
 				foreach ($mis_objetivos as $obj) {
 					if ($obj['tipo_avance'] == 'asignado') {
@@ -37,8 +41,9 @@
 				$mis_objetivos = '';
 				$mi_equipo = '';
 				$los_asignados = '';
+				$mis_departamentos = '';
 			}
-			return ['mis_objetivos' => $mis_objetivos, 'mi_equipo' => $mi_equipo, 'vista' => 'index', 'los_asignados' => $los_asignados];
+			return ['mis_objetivos' => $mis_objetivos, 'mi_equipo' => $mi_equipo, 'vista' => 'index', 'los_asignados' => $los_asignados, 'mis_departamentos' => $mis_departamentos];
 		}
 
 		public function crear(){
@@ -51,6 +56,7 @@
 				$this->objetivo->set('responsable', $_SESSION['id_usuario']);
 				$this->objetivo->set('asignador', $_SESSION['id_usuario']);
 				$this->objetivo->set('prioridad', $_POST['prioridad']);
+				$this->objetivo->set('id_departamento', $_POST['id_departamento']);
 				$this->objetivo->set('objetivo_padre', 0);
 				
 				$id_obj = $this->objetivo->crear();

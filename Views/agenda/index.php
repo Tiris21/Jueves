@@ -65,9 +65,15 @@
       eventLimit  :     true,
 
       events: [
-        <?php foreach ($mis_citas as $cita) { 
-          $link = (is_null($cita['id_objetivo']) || $cita['id_objetivo'] == '' ) ? '' : 'url : "'.URL.'Objetivos/ver/'.$cita['id_objetivo'].'",';
-          $color = ($cita['tipo'] != 'vencimiento' ) ? '' : 'color : "#dc3545",';
+        <?php 
+        $auxt = '';
+        $auxf = '';
+        foreach ($mis_citas as $cita) { 
+
+          if ($auxt != $cita['titulo'] && $auxf != $cita['fecha'] ) {
+
+            $link = (is_null($cita['id_objetivo']) || $cita['id_objetivo'] == '' ) ? '' : 'url : "'.URL.'Objetivos/ver/'.$cita['id_objetivo'].'",';
+            $color = ($cita['tipo'] != 'vencimiento' ) ? '' : 'color : "#dc3545",';
         ?>
       
           {
@@ -80,7 +86,7 @@
 
           },
 
-        <?php } ?>
+        <?php } $auxt = $cita['titulo']; $auxf = $cita['fecha']; } ?>
       ],
       //eventColor: '#378006'
 

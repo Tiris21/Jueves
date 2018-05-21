@@ -36,6 +36,7 @@
                   <th>Fecha Vencimiento</th>
                   <th>Dias p. Venc.</th>
                   <th>Estatus</th>
+                  <th>Dpto.</th>
                   <th>Priorirdad</th>
                   <th>T.A.</th>
                   <th>Acciones</th>
@@ -53,6 +54,7 @@
                   <td><?= formatearFecha($obj['fecha_vencimiento']) ?></td>
                   <td><?= (difDiasAHoy($obj['fecha_vencimiento']) < 0) ? 0 : difDiasAHoy($obj['fecha_vencimiento']) ?> </td>
                   <td class="text-white bg-<?=$c?>"><?= $obj['avance'] ?>% </td>
+                  <td><?= is_null($obj['id_departamento']) ? 'Sin Dpto.' : $obj['departamento'] ?> </td>
                   <td><?= ucwords($obj['prioridad']) ?> </td>
                   <td> <h4 <?= ($obj['tipo_avance'] == 'asignado') ? 'data-toggle="tooltip" title="'.array_shift($los_asignados).'"' : '' ?> > <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
                   <td>
@@ -484,6 +486,14 @@
                 <label>Descripción</label>
                 <textarea class="form-control" name="descripcion" id="descripcion" rows="2"></textarea>
                 <div class="invalid-feedback">Ingresa una descripción válida</div>
+              </div>
+              <div class="form-group">
+                <label>Departamento</label>
+                <select class="custom-select form-control" name="id_departamento" id="id_departamento">
+                  <?php foreach ($mis_departamentos as $dpto) { ?>
+                      <option value="<?=$dpto['id_departamento']?>"><?=$dpto['nombre']?></option>
+                  <?php } ?>
+                </select>
               </div>
               <div class="form-group">
                 <label>Dias de duración</label>

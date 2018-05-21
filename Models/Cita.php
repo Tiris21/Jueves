@@ -24,7 +24,7 @@
 		}
 
 		public function listarMisCitas($usuario){
-			$query = 'SELECT c.*, u.id_usuario FROM cita c JOIN cita_usuario u ON c.id_cita = u.id_cita WHERE c.estatus <> "baja" AND u.id_usuario = ' . $usuario;
+			$query = 'SELECT c.*, u.id_usuario FROM cita c JOIN cita_usuario u ON c.id_cita = u.id_cita WHERE c.estatus <> "baja" AND u.id_usuario = ' . $usuario . ' ORDER BY c.id_cita, c.id_objetivo';
 			return $this->con->consultaRetorno($query);
 		}
 
