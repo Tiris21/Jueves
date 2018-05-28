@@ -164,6 +164,7 @@
 				$this->objetivo->set('objetivo_padre', $_POST['id_objetivo']);
 				$o = $this->objetivo->viewID($_POST['id_objetivo']);
 				$this->objetivo->set('prioridad', $o['prioridad']);
+				$this->objetivo->set('id_departamento', $o['id_departamento']);
 
 				$ids = $this->objetivo->asignar($_POST['id_objetivo'], $_POST['responsable'], $_POST['comentario_asignacion']);
 

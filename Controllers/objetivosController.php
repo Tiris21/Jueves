@@ -104,6 +104,11 @@
 		}
 
 
+		// public function index(){
+		// 	return ['vista' => 'index'];
+		// }
+
+
 	} 
 
 
