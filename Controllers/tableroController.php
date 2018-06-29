@@ -36,6 +36,8 @@
 						$los_asignados[] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
 					}
 				}
+				if ( !isset($los_asignados) )
+					$los_asignados = '';
 
 			}else{
 				$mis_objetivos = '';
@@ -141,6 +143,9 @@
 
 				$this->accion->addComentar($_POST['id_objetivo'], $_POST['comentario'], $file_name);
 				
+				// ENVIO DE CORREOS
+				$this->mailer->sendComment($_POST['id_objetivo'], $_SESSION['id_usuario']);
+
 				if (isset($_POST['equipo'])) {
 					header("Location: " . URL . "Tablero/Equipo");
 				}

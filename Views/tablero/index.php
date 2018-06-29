@@ -611,6 +611,14 @@
         $("#fecha_inicio").removeClass('is-invalid');
     }
 
+    // VALIDACION DIAS DE DURACION
+    if ( $('#dias_duracion').val() < 1 ) {
+        $("#dias_duracion").addClass('is-invalid');
+        validado = false;
+    }else{
+        $("#dias_duracion").removeClass('is-invalid');
+    }
+
     // VALIDACION DIA MES
     if ( $('#dia_mensual').val() < 1 || $('#dia_mensual').val() > 365 ) {
         $("#dia_mensual").addClass('is-invalid');

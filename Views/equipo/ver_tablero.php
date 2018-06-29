@@ -35,7 +35,9 @@
               <tbody>
               <?php 
                 foreach ($objetivos_usuario as $obj) {
-                  $c = getColorPorPorcentaje($obj['avance'], $obj['dias'], $obj['fecha_vencimiento']);
+                  if ($los_que_asigno[ $obj['id_objetivo'] ]) {
+                    
+                    $c = getColorPorPorcentaje($obj['avance'], $obj['dias'], $obj['fecha_vencimiento']);
               ?>
                 <tr>
                   <td> <?= $obj['titulo'] ?> </td>
@@ -43,7 +45,7 @@
                   <td><?= formatearFecha($obj['fecha_vencimiento']) ?></td>
                   <td><?= (difDiasAHoy($obj['fecha_vencimiento']) < 0) ? 0 : difDiasAHoy($obj['fecha_vencimiento']) ?> </td>
                   <td class="text-white bg-<?=$c?>"><?= $obj['avance'] ?>% </td>
-                  <td> <h4 <?= ($obj['tipo_avance'] == 'asignado') ? 'data-toggle="tooltip" title="'.array_shift($los_asignados).'"' : '' ?> > <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
+                  <td> <h4 <?= ($obj['tipo_avance'] == 'asignado') ? 'data-toggle="tooltip" title="'.$los_asignados[$obj['id_objetivo']].'"' : '' ?> > <?= ($obj['tipo_avance'] == 'asignado') ? '<i class="fa fa-fw fa-support text-danger"></i>' : '<i class="fa fa-fw fa-user text-secondary"></i>' ?></h4> </td>
                   <td>
                     <select class="custom-select acciones">
                       <option value="seleccionar" selected>Seleccionar..</option>
@@ -53,8 +55,9 @@
                   </td>
                 </tr>  
                  
-              <?php 
-                }
+              <?php
+                  } // if los_que_asigno
+                } // for
               ?>
                    
               </tbody>

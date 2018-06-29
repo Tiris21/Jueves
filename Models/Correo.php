@@ -45,6 +45,56 @@
 
 		}
 
+		public function sendComment($id_obj, $user_comment){
+
+			$obje = $this->obj->viewID($id_obj);
+			if ($user_comment != $obje['responsable']) {
+				$us = $this->user->viewID($obje['responsable']);
+				$destinatario['correo'] = $us['correo'];
+				$destinatario['nombre'] = $us['nombre'];
+			}
+
+			if ($obje['objetivo_padre'] > 0) {
+
+				$obj_padre = $this->obj->viewID($obje['objetivo_padre']);
+				$us = $this->user->viewID($obj_padre['responsable']);
+				
+				if (isset($destinatario)) {
+					$copiados[$us['nombre']] = $us['correo'];
+				}else{	
+					$destinatario['correo'] = $us['correo'];
+					$destinatario['nombre'] = $us['nombre'];
+				}
+				
+				switch ($obje['prioridad']) {
+					case 'alta':
+						//LISTOOOO
+						while ($obj_padre['objetivo_padre'] > 0) {
+							$obj_padre = $this->obj->viewID( $obj_padre['objetivo_padre'] );
+							$us = $this->user->viewID($obj_padre['responsable']);
+							$copiados[$us['nombre']] = $us['correo'];
+						}
+					break;
+					case 'media':
+						//SOLO 3 VECES
+						$x = 1;
+						while ($obj_padre['objetivo_padre'] > 0 && $x <= 3) {
+							$obj_padre = $this->obj->viewID( $obj_padre['objetivo_padre'] );
+							$us = $this->user->viewID($obj_padre['responsable']);
+							$copiados[$us['nombre']] = $us['correo'];
+							$x++;
+						}
+					break;
+					case 'baja':
+						$us = $this->user->viewID($obj_padre['responsable']);
+						$copiados[$us['nombre']] = $us['correo'];
+						$usuario_padre = $us['usuario_jefe'];
+					break;
+				}
+			
+				enviarCorreo($destinatario, $copiados, 'comentario', $obje['id_objetivo'], $obje['titulo']);
+			}// else no tiene objetivopadre
+		}
 
 		public function sendComplete($id_o){
 				$obje = $this->obj->viewID($id_o);

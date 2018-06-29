@@ -48,7 +48,7 @@
 		}
 
 		public function listarObjetivosDeEquipo($id_usuario){
-			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario AND u.usuario_jefe = "'.$id_usuario.'" WHERE o.estatus = "activo" AND u.estatus = "activo" ';
+			$query = 'SELECT o.*, u.nombre FROM objetivo o JOIN usuario u ON o.responsable = u.id_usuario AND u.usuario_jefe = "'.$id_usuario.'" WHERE o.estatus = "activo" AND o.asignador = "'.$id_usuario.'" AND u.estatus = "activo" ';
 			return $this->con->consultaRetorno($query);
 		}
 
@@ -207,6 +207,18 @@
 				$cont++;
 			}
 			return $str_respon;
+		}
+
+
+		public function vieneDeUnAsginadoMio($id_objetivo, $usuario){
+			$aux_obj = $this->viewId($id_objetivo);
+			while ($aux_obj && $usuario != $aux_obj['responsable'] ) {
+				$aux_obj = $this->viewId($aux_obj['objetivo_padre']);
+			}
+			if ($usuario == $aux_obj['responsable'])
+				return true;
+			else
+				return false;
 		}
 
 

@@ -97,6 +97,12 @@
 
  <!--  header -->
       <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <span class="nav-link ml-6">
+            <i class="fa fa-fw fa-user"></i> <?=$_SESSION['nombre']?>
+          <span>
+        </li>
         
         <!-- NOTIFICACIONES -->
         <?php 
@@ -199,6 +205,22 @@
               </span>
             </div>
           </form>
+        </li> -->
+        
+     <!--  cambio de diseño del menu del header -->
+       <!--  <li class="nav-item dropdown">        
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="fa fa-fw fa-sign-out"></i>Cerrar Sesión
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
         </li> -->
 
         <li class="nav-item">

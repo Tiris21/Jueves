@@ -57,10 +57,14 @@
 		public function tablero($id_usr){
 			$usr = $this->usuario->viewId($id_usr);
 			$objetivos_usuario = $this->objetivo->listarMisObjetivos($id_usr);
-
+			
+			// SOLO TRAER LOS OBJETIVOS QUE vienen de un obj que ASIGNO EL USUARIO LOGGEADO
 			foreach ($objetivos_usuario as $obj) {
-				if ($obj['tipo_avance'] == 'asignado') {
-					$los_asignados[] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
+				$los_que_asigno[ $obj['id_objetivo'] ] = $this->objetivo->vieneDeUnAsginadoMio($obj['id_objetivo'], $_SESSION['id_usuario']);
+				if ($los_que_asigno[ $obj['id_objetivo'] ]) {
+					if ($obj['tipo_avance'] == 'asignado') {
+						$los_asignados[ $obj['id_objetivo'] ] = $this->objetivo->obtenerResponsables($obj['id_objetivo']);
+					}
 				}
 			}
 			if ( !isset($los_asignados) )
@@ -71,7 +75,7 @@
 			if ( is_null($puede_ver)) 
 				$puede_ver = 'carefully';
 
-			return ['vista' => 'ver_tablero', 'objetivos_usuario' => $objetivos_usuario, 'usr' => $usr, 'puede_ver' => $puede_ver, 'los_asignados' => $los_asignados];
+			return ['vista' => 'ver_tablero', 'objetivos_usuario' => $objetivos_usuario, 'usr' => $usr, 'puede_ver' => $puede_ver, 'los_asignados' => $los_asignados, 'los_que_asigno' => $los_que_asigno];
 		}
 
 

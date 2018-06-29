@@ -120,6 +120,14 @@
 							    <h3>Se te ha asignado un nuevo objetivo <i>"'.limpiarCadena($aux).'"</i>  </h3>
 							    <h3>Entra al siguiente link para ir al portal de VHA Project y ver los detalles de la situaci&oacute;n </h3> 
 							    <a href="'.URL.'Objetivos/ver/'.$objetivo.'"> '.URL.'Objetivos/ver/'.$objetivo.' </a>';
+			    	break;	
+
+			    	case 'comentario':
+			    		$mail->Subject = 'Han comentado un objetivo';
+					    $mail->Body    = '<h2> Hola ' . limpiarCadena($destinatario['nombre']) . '! </h2> <br> 
+							    <h3>Se ha agregado un nuevo comentario en <i>"'.limpiarCadena($aux).'"</i>  </h3>
+							    <h3>Entra al siguiente link para ir al portal de VHA Project y ver los detalles de la situaci&oacute;n </h3> 
+							    <a href="'.URL.'Objetivos/ver/'.$objetivo.'"> '.URL.'Objetivos/ver/'.$objetivo.' </a>';
 			    	break;
 			    	
 			    	default:
